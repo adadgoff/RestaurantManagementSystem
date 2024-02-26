@@ -56,10 +56,52 @@
 - Выполнять ДЗ можно на языках Kotlin или Java.
 - Дедлайн сдачи: 10 марта, 23:59.
 
-## Заметки
+## Задачи
+
+- [ ] Привести к норм кодстайлу;
+- [ ] Использовать вместо Id UUID и использовать BigInteger?;
+
+## Дополнительные задачи
+
+- [ ] Сделать возможность смены почты и пароля;
+- [ ] Сделать проверку по почте;
+
+## Команды
+
+```
+docker-compose up -d
+
+```
 
 ## Структура проекта
 
+```
+| src
+|-- main
+|---- java
+|------ com.RestaurantManagementSystem
+|-------- controlles <- "ручки" приложения.
+|-------- models <- связь с БД.
+|-------- repositories <- .
+|-------- services <- CRUD-операции.
+|-- test
+```
 
 ## Информация
+
 Пароль от БД: `postgres`
+
+## Зависимости
+
+```
+
+```
+
+## Разобраться
+
+- [ ] lombok.Data;
+- [ ] lombok.AllArgsConstructor;
+- [ ] org.springframework.stereotype.Service;
+- [ ] lombok.RequiredArgsConstructor;
+- [ ] org.springframework.stereotype.Controller;
+- [ ] org.springframework.ui.Model;
