@@ -10,10 +10,21 @@
 
 <#if dish??>
     <h4>Подробная информация о блюде</h4>
-    <b>Название: </b>${dish.name}<br>
-    <b>Описание: </b>${dish.description}<br>
-    <b>Цена: </b>${dish.price} руб.<br>
+    <b>Название блюда: </b>${dish.name}<br>
+    <b>Описание блюда: </b>${dish.description}<br>
+    <b>Цена блюда: </b>${dish.price} руб.<br>
     <hr>
+
+    <#if dish.getImages()?has_content>
+        <b>Изображения блюда: </b><br>
+        <ul>
+            <#list dish.getImages() as image>
+                <li><img src="/image/${image.id}" height="60px" alt="img"></li>
+            </#list>
+        </ul>
+    <#else>
+        <b>Изображений блюда нет.</b><br>
+    </#if>
 
     <form action="/dish/delete/${dish.id}" method="post">
         <input type="submit" value="Удалить блюдо">

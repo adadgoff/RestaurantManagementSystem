@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,13 +27,14 @@ public class DishController {
 
     @GetMapping("/dish/{id}")
     public String dishInfo(@PathVariable Long id, Model model) {
-        model.addAttribute("dish", dishService.getDishById(id));
+        Dish dish = dishService.getDishById(id);
+        model.addAttribute("dish", dish);
         return "dish-info";
     }
 
     @PostMapping("/dish/create")
-    public String createDish(Dish dish) {
-        dishService.addDish(dish);
+    public String createDish(@RequestParam("files") List<MultipartFile> files, Dish dish) throws IOException {
+        dishService.addDish(dish, files);
         return "redirect:/";
     }
 

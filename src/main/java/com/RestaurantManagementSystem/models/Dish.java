@@ -29,8 +29,12 @@ public class Dish {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
 
-//    private List<Long> reviewIds;
+
+    public void addImageToDish(Image image) {
+        image.setDish(this);
+        images.add(image);
+    }
 }
