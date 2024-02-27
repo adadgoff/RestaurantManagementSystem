@@ -1,14 +1,36 @@
 package com.RestaurantManagementSystem.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Entity
+@Table(name = "dishes")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Dish {
-    private Long Id;
-    private String Name;
-    private Long Price;
-//    private List<Long> ImageIds;
-//    private List<Long> ReviewIds;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "price")
+    private Long price;
+
+    @Column(name = "description")
+    private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
+    private List<Image> images = new ArrayList<>();
+
+//    private List<Long> reviewIds;
 }

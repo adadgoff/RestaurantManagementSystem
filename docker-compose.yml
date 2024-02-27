@@ -1,12 +1,16 @@
 version: '3'
 
 services:
-  postgres:
+  db:
+    restart: always
     image: 'postgres:16.2'
-    container_name: 'java-postgres'
-    ports:
-      - "5433:5432"
     environment:
+      - 'POSTGRES_DB=postgres'
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_HOST_AUTH_METHOD=trust'
-      - 'POSTGRES_DB=java'
+      - 'POSTGRES_PASSWORD=postgres'
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./src/main/java/com.RestaurantManagementSystem/utils/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5433:5432"

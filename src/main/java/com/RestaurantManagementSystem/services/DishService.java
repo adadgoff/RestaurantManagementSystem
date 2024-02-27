@@ -1,38 +1,37 @@
 package com.RestaurantManagementSystem.services;
 
 import com.RestaurantManagementSystem.models.Dish;
+import com.RestaurantManagementSystem.repositories.DishRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/*
-CRUD-operations with Dish.
- */
-@Service
-public class DishService {
-    private List<Dish> dishes = new ArrayList<>();
-    private Long ID = 0L;
 
-    public List<Dish> getDishes() {
-        return dishes;
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class DishService {
+    private final DishRepository dishRepository;
+
+    public List<Dish> listDishes(String name) {
+        if (name != null) {
+            return dishRepository.findByName(name);
+        }
+        return dishRepository.findAll();
     }
 
-    public void addDish(Dish dish) {
-        dish.setId(++ID);
-        dishes.add(dish);
+    public Dish getDishById(Long id) {
+        return dishRepository.findById(id).orElse(null);
     }
 
     public void deleteDish(Long id) {
-        dishes.removeIf(dish -> dish.getId().equals(id));
+        dishRepository.deleteById(id);
     }
 
-    public Dish getById(Long id) {
-        for (Dish dish : dishes) {
-            if (dish.getId().equals(id)) {
-                return dish;
-            }
-        }
-        return null;
+    public void addDish(Dish dish) {
+        log.info("Adding new {}", dish);
+        dishRepository.save(dish);
     }
 }

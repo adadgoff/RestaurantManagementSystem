@@ -56,15 +56,28 @@
 - Выполнять ДЗ можно на языках Kotlin или Java.
 - Дедлайн сдачи: 10 марта, 23:59.
 
-## Задачи
+## Зависимости
 
-- [ ] Привести к норм кодстайлу;
-- [ ] Использовать вместо Id UUID и использовать BigInteger?;
+```
+Lombok
 
-## Дополнительные задачи
+Apache Freemaker
+Thymeleaf
 
-- [ ] Сделать возможность смены почты и пароля;
-- [ ] Сделать проверку по почте;
+Java Mail Sender
+JDBC API
+
+Spring Data JPA
+Spring Security
+Spring Web
+
+PostgreSQL Driver
+```
+
+## Информация
+
+Пользователь БД: `postgres`
+Пароль от БД: `postgres`
 
 ## Команды
 
@@ -87,21 +100,15 @@ docker-compose up -d
 |-- test
 ```
 
-## Информация
+## Задачи
 
-Пароль от БД: `postgres`
+- [ ] Привести к норм кодстайлу;
+- [ ] Использовать вместо Id UUID и использовать BigInteger?;
+- [ ] Makefile + разобраться с созданием тестовой БД при запуске docker;
+- [ ] Настроить .env файл;
+- [ ] В Orders хранятся выполненные заказы. Заказы входят по принципу Stack'а FIFO.
 
-## Зависимости
+## Дополнительные задачи
 
-```
-
-```
-
-## Разобраться
-
-- [ ] lombok.Data;
-- [ ] lombok.AllArgsConstructor;
-- [ ] org.springframework.stereotype.Service;
-- [ ] lombok.RequiredArgsConstructor;
-- [ ] org.springframework.stereotype.Controller;
-- [ ] org.springframework.ui.Model;
+- [ ] Сделать возможность смены почты и пароля;
+- [ ] Сделать проверку по почте;

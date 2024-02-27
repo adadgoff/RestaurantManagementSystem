@@ -1,10 +1,10 @@
-CREATE TABLE Dishes
+CREATE TABLE dishes
 (
-    Id          SERIAL PRIMARY KEY,
-    Name        VARCHAR(255) NOT NULL,
-    Description TEXT         NOT NULL,
-    Price       INTEGER      NOT NULL,
-    ImageIds    INTEGER[],
-    ReviewIds   INTEGER[]
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    description TEXT,
+    price       INTEGER      NOT NULL,
+    imageIds    INTEGER[],
+    reviewIds   INTEGER[]
 );
 
