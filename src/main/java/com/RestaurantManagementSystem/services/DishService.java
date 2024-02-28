@@ -32,7 +32,10 @@ public class DishService {
             if (file.getSize() != 0) {
                 Image image = Image.builder().contentType(file.getContentType()).imgBinary(file.getBytes()).build();
                 // TODO: compress image and take only image.
-                dish.getImages().add(image);
+
+                // TODO: decide way of adding images.
+                dish.addImageToDish(image);
+//                dish.getImages().add(image);
             }
         }
         log.info("Creating new Dish. id={}; name={}; price={}; images={}", dish.getId(), dish.getName(), dish.getPrice(), dish.getImages().stream().map(Image::getId).collect(Collectors.toList()));

@@ -33,8 +33,8 @@ public class Dish {
     private List<Image> images = new ArrayList<>();
 
     // TODO: maybe delete.
-    //    public void addImageToDish(Image image) {
-    //        image.setDish(this);
-    //        images.add(image);
-    //    }
+    public void addImageToDish(Image image) {
+        image.setDish(this);
+        images.add(image);
+    }
 }

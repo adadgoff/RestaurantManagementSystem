@@ -29,6 +29,7 @@
     </#if>
 
     <form action="/dish/delete/${dish.id}" method="post">
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
         <input type="submit" value="Удалить блюдо">
     </form>
 <#else>
