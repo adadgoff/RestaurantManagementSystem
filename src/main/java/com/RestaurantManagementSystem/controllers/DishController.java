@@ -22,7 +22,8 @@ public class DishController {
 
     @GetMapping("/")
     public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
-        model.addAttribute("dishes", dishService.listDishes(name));
+//        model.addAttribute("dishes", dishService.listDishes(name));
+        model.addAttribute("dishes", dishService.getDishes(name));
         return "dishes";
     }
 

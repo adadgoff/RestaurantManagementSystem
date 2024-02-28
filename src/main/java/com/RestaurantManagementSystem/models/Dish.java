@@ -29,10 +29,9 @@ public class Dish {
     @Column(name = "description", nullable = true)
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "dish")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
 
-    // TODO: maybe delete.
     public void addImageToDish(Image image) {
         image.setDish(this);
         images.add(image);
