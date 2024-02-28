@@ -20,21 +20,21 @@ public class Dish {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Long price;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = true)
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
 
-
-    public void addImageToDish(Image image) {
-        image.setDish(this);
-        images.add(image);
-    }
+    // TODO: maybe delete.
+    //    public void addImageToDish(Image image) {
+    //        image.setDish(this);
+    //        images.add(image);
+    //    }
 }

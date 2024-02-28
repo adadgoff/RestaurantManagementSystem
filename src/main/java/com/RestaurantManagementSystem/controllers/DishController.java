@@ -25,19 +25,25 @@ public class DishController {
         return "dishes";
     }
 
+    // Create.
+    @PostMapping("/dish/create")
+    public String createDish(@RequestParam("files") List<MultipartFile> files, Dish dish) throws IOException {
+        dishService.createDish(dish, files);
+        return "redirect:/";
+    }
+
+    // Read.
     @GetMapping("/dish/{id}")
-    public String dishInfo(@PathVariable Long id, Model model) {
+    public String getDish(@PathVariable Long id, Model model) {
         Dish dish = dishService.getDishById(id);
         model.addAttribute("dish", dish);
         return "dish-info";
     }
 
-    @PostMapping("/dish/create")
-    public String createDish(@RequestParam("files") List<MultipartFile> files, Dish dish) throws IOException {
-        dishService.addDish(dish, files);
-        return "redirect:/";
-    }
+    // Update.
+    // TODO: implement update controller.
 
+    // Delete.
     @PostMapping("/dish/delete/{id}")
     public String deleteDish(@PathVariable Long id) {
         dishService.deleteDish(id);

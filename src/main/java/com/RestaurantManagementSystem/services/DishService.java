@@ -26,23 +26,29 @@ public class DishService {
         return dishRepository.findAll();
     }
 
-    public void addDish(Dish dish, List<MultipartFile> files) throws IOException {
+    // Create.
+    public void createDish(Dish dish, List<MultipartFile> files) throws IOException {
         for (MultipartFile file : files) {
             if (file.getSize() != 0) {
                 Image image = Image.builder().contentType(file.getContentType()).imgBinary(file.getBytes()).build();
-                // Возможная логика для сжатия файла.
-                dish.addImageToDish(image);
+                // TODO: compress image and take only image.
+                dish.getImages().add(image);
             }
         }
-        log.info("Adding new Dish. id: {}; name: {}; price: {}; images: {}", dish.getId(), dish.getName(), dish.getPrice(), dish.getImages().stream().map(Image::getId).collect(Collectors.toList()));
+        log.info("Creating new Dish. id={}; name={}; price={}; images={}", dish.getId(), dish.getName(), dish.getPrice(), dish.getImages().stream().map(Image::getId).collect(Collectors.toList()));
         dishRepository.save(dish);
     }
 
-    public void deleteDish(Long id) {
-        dishRepository.deleteById(id);
-    }
-
+    // Read.
     public Dish getDishById(Long id) {
         return dishRepository.findById(id).orElse(null);
+    }
+
+    // Update.
+    // TODO: implement update controller.
+
+    // Delete.
+    public void deleteDish(Long id) {
+        dishRepository.deleteById(id);
     }
 }

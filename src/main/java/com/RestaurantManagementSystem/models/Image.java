@@ -18,11 +18,11 @@ public class Image {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "content_type")
+    @Column(name = "content_type", nullable = false)
     private String contentType;
 
     @Lob
-    @Column(name = "img_binary", columnDefinition = "longblob")
+    @Column(name = "img_binary", nullable = false)
     private byte[] imgBinary;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
