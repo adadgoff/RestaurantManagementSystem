@@ -17,6 +17,7 @@
 
 <form action="/" method="get">
     Поиск по названию блюда: <input type="text" name="name"/><br>
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Поиск"/>
 </form>
 
@@ -35,6 +36,7 @@
     Описание блюда: <input type="text" name="description"/><br>
     Цена блюда: <input type="number" name="price"/><br>
     Изображения блюда: <input type="file" name="files" multiple><br> <!-- Добавляем multiple, чтобы можно было загрузить несколько файлов -->
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Добавить товар"/>
 </form>
 

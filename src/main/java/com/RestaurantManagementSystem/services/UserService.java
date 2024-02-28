@@ -25,9 +25,6 @@ public class UserService {
             return false;  // User already exists.
         }
 
-        // TODO: try with default values.
-        // user.setActive(true);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(Role.ROLE_USER);
 

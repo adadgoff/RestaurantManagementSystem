@@ -3,6 +3,7 @@ package com.RestaurantManagementSystem.controllers;
 import com.RestaurantManagementSystem.models.Dish;
 import com.RestaurantManagementSystem.services.DishService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,8 @@ public class DishController {
 
     @GetMapping("/")
     public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
-        model.addAttribute("dishes", dishService.listDishes(name));
+//        model.addAttribute("dishes", dishService.listDishes(name));
+        model.addAttribute("dishes", dishService.getDishes(name));
         return "dishes";
     }
 
