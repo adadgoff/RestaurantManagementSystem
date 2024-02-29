@@ -28,7 +28,7 @@ public class DishService {
                 dish.addImageToDish(image);
             }
         }
-        log.info("Creating new Dish. id={}; name={}; price={}; images={}", dish.getId(), dish.getName(), dish.getPrice(), dish.getImages().stream().map(Image::getId).collect(Collectors.toList()));
+        log.info("Creating new Dish. id={}; name={}; price={}; image ids={}", dish.getId(), dish.getName(), dish.getPrice(), dish.getImages().stream().map(Image::getId).collect(Collectors.toList()));
         dishRepository.save(dish);
     }
 

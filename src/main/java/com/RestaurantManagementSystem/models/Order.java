@@ -1,5 +1,6 @@
 package com.RestaurantManagementSystem.models;
 
+import com.RestaurantManagementSystem.models.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,11 +24,18 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     private List<Dish> dishes = new ArrayList<>();
 
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Column(name = "cost")
     private Long cost;
 
     @Column(name = "start_time")
     private Instant startTime;
+
+    @Column(name = "status")
+    private Status status;
 
     @PrePersist
     private void init() {

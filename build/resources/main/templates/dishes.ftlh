@@ -34,8 +34,9 @@
 <form action="/dish/create" method="post" enctype="multipart/form-data">
     Название блюда: <input type="text" name="name"/><br>
     Описание блюда: <input type="text" name="description"/><br>
-    Цена блюда: <input type="number" name="price"/><br>
+    Цена блюда: <input type="number" min="0" step="1" name="price"/><br>
     Изображения блюда: <input type="file" name="files" multiple accept=".png, .jpg, .jpeg, .gif"><br> <!-- Добавляем multiple, чтобы можно было загрузить несколько файлов -->
+    Время приготовления блюда: <input type="time" step="1" name="cookingTime" title="Введите время в формате HH:MM:SS"><br>
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Добавить товар"/>
 </form>

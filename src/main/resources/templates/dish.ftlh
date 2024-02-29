@@ -15,6 +15,9 @@
     <b>Название блюда: </b>${dish.name}<br>
     <b>Описание блюда: </b>${dish.description}<br>
     <b>Цена блюда: </b>${dish.price} руб.<br>
+    <b>Время приготовления
+        блюда: </b>${dish.getCookingTime().hour} ч / ${dish.getCookingTime().minute} мин / ${dish.getCookingTime().second} с
+    <br>
     <hr>
 
     <#if dish.getImages()?has_content>

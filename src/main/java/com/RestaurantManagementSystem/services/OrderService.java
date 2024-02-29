@@ -1,6 +1,8 @@
 package com.RestaurantManagementSystem.services;
 
+import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.models.Order;
+import com.RestaurantManagementSystem.multithread.Kitchen;
 import com.RestaurantManagementSystem.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +15,21 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class OrderService {
+    // TODO: implement.
     private final OrderRepository orderRepository;
+    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COOKS_NUMBER);
 
-    // Create.
     public void createOrder(Order order) throws IOException {
-        // TODO: create order-thread.
+
     }
 
-    // Read.
-//    public List<Order> getOrders() {
-//
-//    }
+    // Delete. Delete order from ThreadPull.
+    public void deleteExecutingOrder() {
+
+    }
+
+    // Delete. Delete order from DataBase.
+    public void deleteFinishedOrder() {
+
+    }
 }

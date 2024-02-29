@@ -20,16 +20,6 @@ import java.util.List;
 public class DishController {
     private final DishService dishService;
 
-//    @GetMapping("/")
-//    public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
-//        List<Dish> dishes = dishService.getDishes(name);
-//        for (Dish dish : dishes) {
-//            Hibernate.initialize(dish);
-//        }
-//        model.addAttribute("dishes", dishes);
-//        return "dishes";
-//    }
-
     @GetMapping("/")
     public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
         model.addAttribute("dishes", dishService.getDishes(name));

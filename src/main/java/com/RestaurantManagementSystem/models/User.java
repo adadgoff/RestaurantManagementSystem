@@ -9,10 +9,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -38,7 +35,7 @@ public class User implements UserDetails {
     private boolean active = true;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id")
+    @JoinColumn(name = "image_id", nullable = true)
     private Image profileIcon;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -46,7 +43,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-    // orders.
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
+
     // reviews.
 
     // Security.
