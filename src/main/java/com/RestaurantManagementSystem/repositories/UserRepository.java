@@ -3,6 +3,9 @@ package com.RestaurantManagementSystem.repositories;
 import com.RestaurantManagementSystem.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.UUID;
+
+// TODO: maybe bug with UUID?
+public interface UserRepository extends JpaRepository<User, UUID> {
     User findByEmail(String email);
 }

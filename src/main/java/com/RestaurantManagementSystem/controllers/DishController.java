@@ -3,7 +3,7 @@ package com.RestaurantManagementSystem.controllers;
 import com.RestaurantManagementSystem.models.Dish;
 import com.RestaurantManagementSystem.services.DishService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +20,18 @@ import java.util.List;
 public class DishController {
     private final DishService dishService;
 
+//    @GetMapping("/")
+//    public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
+//        List<Dish> dishes = dishService.getDishes(name);
+//        for (Dish dish : dishes) {
+//            Hibernate.initialize(dish);
+//        }
+//        model.addAttribute("dishes", dishes);
+//        return "dishes";
+//    }
+
     @GetMapping("/")
     public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
-//        model.addAttribute("dishes", dishService.listDishes(name));
         model.addAttribute("dishes", dishService.getDishes(name));
         return "dishes";
     }
@@ -39,7 +48,7 @@ public class DishController {
     public String getDish(@PathVariable Long id, Model model) {
         Dish dish = dishService.getDishById(id);
         model.addAttribute("dish", dish);
-        return "dish-info";
+        return "dish";
     }
 
     // Update.

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +31,15 @@ public class Dish {
     @Column(name = "description", nullable = true)
     private String description;
 
+    @Column(name = "cooking_time", nullable = false)
+    private LocalTime cookingTime;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn
+    private Order order;
 
     public void addImageToDish(Image image) {
         image.setDish(this);

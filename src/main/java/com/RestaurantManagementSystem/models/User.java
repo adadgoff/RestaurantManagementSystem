@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image profileIcon;
 
@@ -46,6 +46,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+    // orders.
+    // reviews.
 
     // Security.
 

@@ -19,20 +19,6 @@ import java.util.stream.Collectors;
 public class DishService {
     private final DishRepository dishRepository;
 
-//    public List<Dish> listDishes(String name) {
-//        if (name != null) {
-//            return dishRepository.findByName(name);
-//        }
-//        return dishRepository.findAll();
-//    }
-
-    public List<Dish> getDishes(String name) {
-        if (name != null && !name.isBlank()) {
-            return dishRepository.findByName(name);
-        }
-        return dishRepository.findAll();
-    }
-
     // Create.
     public void createDish(Dish dish, List<MultipartFile> files) throws IOException {
         for (MultipartFile file : files) {
@@ -44,6 +30,14 @@ public class DishService {
         }
         log.info("Creating new Dish. id={}; name={}; price={}; images={}", dish.getId(), dish.getName(), dish.getPrice(), dish.getImages().stream().map(Image::getId).collect(Collectors.toList()));
         dishRepository.save(dish);
+    }
+
+    // Read.
+    public List<Dish> getDishes(String name) {
+        if (name != null && !name.isBlank()) {
+            return dishRepository.findAllByName(name);
+        }
+        return dishRepository.findAll();
     }
 
     // Read.

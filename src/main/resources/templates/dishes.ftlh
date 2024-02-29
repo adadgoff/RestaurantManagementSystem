@@ -35,7 +35,7 @@
     Название блюда: <input type="text" name="name"/><br>
     Описание блюда: <input type="text" name="description"/><br>
     Цена блюда: <input type="number" name="price"/><br>
-    Изображения блюда: <input type="file" name="files" multiple><br> <!-- Добавляем multiple, чтобы можно было загрузить несколько файлов -->
+    Изображения блюда: <input type="file" name="files" multiple accept=".png, .jpg, .jpeg, .gif"><br> <!-- Добавляем multiple, чтобы можно было загрузить несколько файлов -->
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Добавить товар"/>
 </form>
