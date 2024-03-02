@@ -1,7 +1,9 @@
 package com.RestaurantManagementSystem.controllers;
 
+import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.models.Dish;
 import com.RestaurantManagementSystem.services.DishService;
+import com.RestaurantManagementSystem.utils.TimeParser;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 @Controller
@@ -23,12 +26,14 @@ public class DishController {
     @GetMapping("/")
     public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
         model.addAttribute("dishes", dishService.getDishes(name));
+        model.addAttribute("regexTime", GLOBAL_VARIABLES.REGEX_TIME);
         return "dishes";
     }
 
     // Create.
     @PostMapping("/dish/create")
-    public String createDish(@RequestParam("files") List<MultipartFile> files, Dish dish) throws IOException {
+    public String createDish(@RequestParam("files") List<MultipartFile> files, String cookingTimeStr, Dish dish) throws IOException {
+        dish.setCookingTime(TimeParser.FromFormatStringHoursMinutesSecondsToDuration(cookingTimeStr));
         dishService.createDish(dish, files);
         return "redirect:/";
     }
