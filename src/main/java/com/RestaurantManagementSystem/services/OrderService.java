@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -23,13 +22,8 @@ public class OrderService {
 
     }
 
-    // Delete. Delete order from ThreadPull.
-    public void deleteExecutingOrder() {
-
-    }
-
-    // Delete. Delete order from DataBase.
-    public void deleteFinishedOrder() {
+    // Delete. Delete order.
+    public void deleteCookingOrder() {
 
     }
 }

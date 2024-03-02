@@ -27,10 +27,6 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     private List<Dish> cookedDishes = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Column(name = "cost (RUB)")
     private Long cost;
 
@@ -42,6 +38,10 @@ public class Order {
 
     @Column(name = "status")
     private Status status;
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @PrePersist
     private void init() {

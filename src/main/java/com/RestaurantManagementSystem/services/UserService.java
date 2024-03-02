@@ -1,8 +1,8 @@
 package com.RestaurantManagementSystem.services;
 
 import com.RestaurantManagementSystem.models.User;
-import com.RestaurantManagementSystem.repositories.UserRepository;
 import com.RestaurantManagementSystem.models.enums.Role;
+import com.RestaurantManagementSystem.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     // Create.
     public boolean createUser(User user) {

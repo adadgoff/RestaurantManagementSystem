@@ -22,6 +22,10 @@ public class Review {
     @Column(name = "text", nullable = false)
     private String text;
 
-    @Column(name = "publishTime", nullable = false)
+    @Column(name = "publish_time", nullable = false)
     private Instant publishTime;
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

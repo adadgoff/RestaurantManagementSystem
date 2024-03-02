@@ -5,7 +5,6 @@ import com.RestaurantManagementSystem.models.Dish;
 import com.RestaurantManagementSystem.services.DishService;
 import com.RestaurantManagementSystem.utils.TimeParser;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
 
 @Controller
