@@ -27,24 +27,19 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     private List<Dish> cookedDishes = new ArrayList<>();
 
-    @Column(name = "cost (RUB)")
+    @Column(name = "cost (RUB)", nullable = false)
     private Long cost;
 
-    @Column(name = "start_time")
-    private Instant startTime;
+    @Column(name = "start_time", nullable = false)
+    private Instant startTime = Instant.now();
 
-    @Column(name = "end_time")
+    @Column(name = "end_time", nullable = true)
     private Instant endTime;
 
-    @Column(name = "status")
-    private Status status;
+    @Column(name = "status", nullable = false)
+    private Status status = Status.COOKING;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_ids", nullable = false)
     private User user;
-
-    @PrePersist
-    private void init() {
-        startTime = Instant.now();
-    }
 }

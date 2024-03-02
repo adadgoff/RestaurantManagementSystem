@@ -3,7 +3,7 @@ package com.RestaurantManagementSystem.controllers;
 import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.models.Dish;
 import com.RestaurantManagementSystem.services.DishService;
-import com.RestaurantManagementSystem.utils.TimeParser;
+import com.RestaurantManagementSystem.utils.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +21,8 @@ import java.util.List;
 public class DishController {
     private final DishService dishService;
 
-    @GetMapping("/")
+    // Read all.
+    @GetMapping("/dish/all")
     public String dishes(@RequestParam(name = "name", required = false) String name, Model model) {
         model.addAttribute("dishes", dishService.getDishes(name));
         model.addAttribute("regexTime", GLOBAL_VARIABLES.REGEX_TIME);
@@ -31,9 +32,9 @@ public class DishController {
     // Create.
     @PostMapping("/dish/create")
     public String createDish(@RequestParam("files") List<MultipartFile> files, String cookingTimeStr, Dish dish) throws IOException {
-        dish.setCookingTime(TimeParser.FromFormatStringHoursMinutesSecondsToDuration(cookingTimeStr));
+        dish.setCookingTime(TimeUtils.FromFormatStringHoursMinutesSecondsToDuration(cookingTimeStr));
         dishService.createDish(dish, files);
-        return "redirect:/";
+        return "redirect:dish/all";
     }
 
     // Read.
@@ -51,6 +52,6 @@ public class DishController {
     @PostMapping("/dish/delete/{id}")
     public String deleteDish(@PathVariable Long id) {
         dishService.deleteDish(id);
-        return "redirect:/";
+        return "redirect:dish/all";
     }
 }

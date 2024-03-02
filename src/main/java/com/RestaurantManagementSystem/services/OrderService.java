@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -17,11 +18,26 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
-    public void createOrder(Order order) throws IOException {
-
+    // Create.
+    public void createOrder(Order order) {
+        log.info("Creating new Order. id={}; dishes to cook={}; start time={}", order.getId(), order.getCookingDishes(), order.getStartTime());
+        orderRepository.save(order);
     }
 
-    public void deleteCookingOrder() {
+    // Read,
+    public List<Order> getOrders() {
+        return orderRepository.findAll();
+    }
 
+    public Order getOrderById(Long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    // Update.
+    // TODO: implement update.
+
+    // Delete.
+    public void deleteOrder(Long id) {
+        orderRepository.deleteById(id);
     }
 }

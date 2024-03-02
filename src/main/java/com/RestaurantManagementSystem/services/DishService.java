@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +27,6 @@ public class DishService {
         for (MultipartFile file : files) {
             if (file.getSize() != 0) {
                 Image image = Image.builder().contentType(file.getContentType()).imgBinary(file.getBytes()).build();
-                // TODO: compress image and take only image.
                 dish.addImageToDish(image);
             }
         }
@@ -46,7 +48,7 @@ public class DishService {
     }
 
     // Update.
-    // TODO: implement update controller.
+    // TODO: implement update.
 
     // Delete.
     public void deleteDish(Long id) {

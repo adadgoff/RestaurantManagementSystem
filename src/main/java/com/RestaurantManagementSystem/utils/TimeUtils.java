@@ -2,7 +2,7 @@ package com.RestaurantManagementSystem.utils;
 
 import java.time.Duration;
 
-public class TimeParser {
+public class TimeUtils {
     /**
      * Return Duration from a string in format "HH:mm:ss".
      * @param formatStringHoursMinutesSeconds string in format "HH:mm:ss".

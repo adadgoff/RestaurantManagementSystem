@@ -20,7 +20,6 @@ public class ImageController {
 
     @GetMapping("/image/{id}")
     private ResponseEntity<?> getImageById(@PathVariable Long id) {
-        // TODO: refactor code, maybe create ImageService.
         Image image = imageRepository.findById(id).orElse(null);
         return ResponseEntity.ok()
                 .header("fileId", String.valueOf(image.getId()))

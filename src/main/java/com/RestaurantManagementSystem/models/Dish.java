@@ -9,7 +9,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "dishes")
 @Data
@@ -40,7 +39,7 @@ public class Dish {
     private List<Image> images = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "order_ids", nullable = true)
     private Order order;
 
     public void addImageToDish(Image image) {
