@@ -36,7 +36,8 @@
     Описание блюда: <input type="text" name="description"/><br>
     Цена блюда: <input type="number" min="0" step="1" name="price" title="Цена должна быть целым неотрицательным числом."/><br>
     Изображения блюда: <input type="file" name="files" multiple accept=".png, .jpg, .jpeg, .gif"/><br> <!-- Добавляем multiple, чтобы можно было загрузить несколько файлов -->
-    Время приготовления блюда: <input type="time" step="1" name="cookingTime"/><br>
+    <#-- TODO: Реализовать ввод времени -->
+    <#-- Время приготовления блюда: <input type="time" step="1" name="cookingTime"/><br>-->
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Добавить товар"/>
 </form>

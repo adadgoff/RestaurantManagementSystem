@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderService {
     // TODO: implement.
     private final OrderRepository orderRepository;
-    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COOKS_NUMBER);
+    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
     public void createOrder(Order order) throws IOException {
 

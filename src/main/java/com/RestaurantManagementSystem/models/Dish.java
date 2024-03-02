@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Dish {
     private String description;
 
     @Column(name = "cooking_time", nullable = false)
-    private LocalTime cookingTime;
+    private Duration cookingTime;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
     private List<Image> images = new ArrayList<>();

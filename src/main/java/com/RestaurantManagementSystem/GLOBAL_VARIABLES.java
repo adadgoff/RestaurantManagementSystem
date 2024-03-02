@@ -6,5 +6,5 @@ public class GLOBAL_VARIABLES {
     /**
      * Number of cooks in the kitchen.
      */
-    public static int COOKS_NUMBER = 10;
+    public static int COUNT_COOKS = 10;
 }
