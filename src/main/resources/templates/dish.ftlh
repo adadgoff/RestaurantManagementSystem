@@ -18,6 +18,7 @@
     <b>Время приготовления
         блюда: </b>${dish.getCookingTime().toHoursPart()} ч / ${dish.getCookingTime().toMinutesPart()} мин / ${dish.getCookingTime().toSecondsPart()} с
     <br>
+    <b>Вес блюда: </b>${dish.weight} г.<br>
     <hr>
 
     <#if dish.getImages()?has_content>

@@ -22,17 +22,23 @@ public class Order {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
-    private List<Dish> dishes = new ArrayList<>();
+    private List<Dish> cookingDishes = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
+    private List<Dish> cookedDishes = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "cost")
+    @Column(name = "cost (RUB)")
     private Long cost;
 
     @Column(name = "start_time")
     private Instant startTime;
+
+    @Column(name = "end_time")
+    private Instant endTime;
 
     @Column(name = "status")
     private Status status;

@@ -26,14 +26,17 @@ public class Dish {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private Long price;
-
     @Column(name = "description", nullable = true)
     private String description;
 
+    @Column(name = "price (RUB)", nullable = false)
+    private Long price;
+
     @Column(name = "cooking_time", nullable = false)
     private Duration cookingTime;
+
+    @Column(name = "weight (grams)", nullable = true)
+    private Integer weight;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
     private List<Image> images = new ArrayList<>();
