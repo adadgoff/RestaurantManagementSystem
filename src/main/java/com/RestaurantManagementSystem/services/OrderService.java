@@ -14,7 +14,6 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class OrderService {
-    // TODO: implement.
     private final OrderRepository orderRepository;
     private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
@@ -22,7 +21,6 @@ public class OrderService {
 
     }
 
-    // Delete. Delete order.
     public void deleteCookingOrder() {
 
     }
