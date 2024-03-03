@@ -1,30 +1,34 @@
 package com.RestaurantManagementSystem.services;
 
-import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
+import com.RestaurantManagementSystem.models.Dish;
 import com.RestaurantManagementSystem.models.Order;
-import com.RestaurantManagementSystem.multithread.Kitchen;
 import com.RestaurantManagementSystem.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
+//    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
     // Create.
     public void createOrder(Order order) {
-        log.info("Creating new Order. id={}; dishes to cook={}; start time={}", order.getId(), order.getCookingDishes(), order.getStartTime());
+        log.info("Creating new Order. id={}; dishes to cook ids={}; dishes names={}; status={}",
+                order.getId(),
+                order.getCookingDishes().stream().map(Dish::getId).collect(Collectors.toList()),
+                order.getCookingDishes().stream().map(Dish::getName).collect(Collectors.toList()),
+                order.getStatus()
+        );
         orderRepository.save(order);
     }
 
-    // Read,
+    // Read all.
     public List<Order> getOrders() {
         return orderRepository.findAll();
     }

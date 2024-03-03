@@ -9,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -31,5 +33,10 @@ public class UserService {
         userRepository.save(user);
 
         return true;
+    }
+
+    // Read.
+    public User getUserByUUID(UUID uuid) {
+        return userRepository.getReferenceById(uuid);
     }
 }

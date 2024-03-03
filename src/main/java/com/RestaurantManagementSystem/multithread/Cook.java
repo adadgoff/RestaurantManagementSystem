@@ -25,7 +25,7 @@ public class Cook extends Thread {
                 if (dishToCook != null) {
                     try {
                         Thread.sleep(dishToCook.getCookingTime());
-                        // TODO: Обновить БД.
+                        // TODO: Update DB.
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

@@ -26,11 +26,14 @@ public class Dish {
     @Column(name = "description", nullable = true)
     private String description;
 
-    @Column(name = "price (RUB)", nullable = false)
+    @Column(name = "price (rubles)", nullable = false)
     private Long price;
 
     @Column(name = "cooking_time", nullable = false)
     private Duration cookingTime;
+
+    @Column(name = "count", nullable = false)
+    private Long count;
 
     @Column(name = "weight (grams)", nullable = true)
     private Integer weight;
@@ -39,7 +42,7 @@ public class Dish {
     private List<Image> images = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_ids", nullable = true)
+    @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 
     public void addImageToDish(Image image) {

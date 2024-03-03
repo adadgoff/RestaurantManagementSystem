@@ -16,11 +16,11 @@
         <hr>
         <p>
             <b>id заказа: ${order.id}</b><br>
-            Блюда в статусе `Готовится`: ${order.cookingDishes}<br>
-            Блюда в статусе `Готов`: ${order.cookedDishes}<br>
+            Блюда в статусе `Готовится`: <#list order.cookingDishes as cookingDish>${cookingDish.name},&nbsp;</#list><br>
+            Блюда в статусе `Готов`: <#list order.cookedDishes as cookedDish>${cookedDish.name},&nbsp;</#list><br>
             Стоимость заказа: ${order.cost} руб.<br>
             Начало заказа: ${order.startTime}<br>
-            Конец заказа: ${order.endTime}<br>
+            Конец заказа:<#if order.endTime??>${order.endTime}<#else>NULL</#if><br>
             Статус заказа: `${order.status}`<br>
         </p>
         <hr>
@@ -30,7 +30,9 @@
 
 <h3>Создать заказ</h3>
 <form action="/order/create" method="post">
-    id блюд в заказе через пробел: <input type="text" name="orderDishIdsStr" pattern="${regexIds}" title="Введите id блюд числами через пробел."><br>
+    <#-- TODO: implement many dishes to order -->
+    Введите id блюда в заказе: <input type="number" name="idDishToCook"/>
+
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Добавить заказ"/>
 </form>

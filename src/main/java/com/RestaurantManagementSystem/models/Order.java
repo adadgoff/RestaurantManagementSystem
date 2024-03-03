@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class Order {  // TODO: set up nullable for fields.
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -27,19 +27,25 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     private List<Dish> cookedDishes = new ArrayList<>();
 
-    @Column(name = "cost (RUB)", nullable = false)
+    @Column(name = "cost (rubles)")
     private Long cost;
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time")
     private Instant startTime = Instant.now();
 
-    @Column(name = "end_time", nullable = true)
+    @Column(name = "end_time")
     private Instant endTime;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private Status status = Status.COOKING;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_ids", nullable = false)
+    // TODO: nullable = false.
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @PrePersist
+    private void init() {
+        cost = cookingDishes.stream().mapToLong(Dish::getPrice).sum();  // TODO: implement summa cookingDishes.
+    }
 }

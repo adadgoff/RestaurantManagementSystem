@@ -30,5 +30,5 @@ public class Kitchen {
         dishesToCook.add(dishToCook);
     }
 
-    // TODO: другие операции с БД.
+    // TODO: other methods to work with DB.
 }
