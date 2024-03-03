@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dish {
+public class DishModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -23,7 +23,7 @@ public class Dish {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = true)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "price (rubles)", nullable = false)
@@ -35,17 +35,20 @@ public class Dish {
     @Column(name = "count", nullable = false)
     private Long count;
 
-    @Column(name = "weight (grams)", nullable = true)
+    @Column(name = "weight (grams)")
     private Integer weight;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
-    private List<Image> images = new ArrayList<>();
+    private List<ImageModel> images = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
+    private List<ReviewModel> reviews = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = true)
-    private Order order;
+    @JoinColumn(name = "order_id")
+    private OrderModel order;
 
-    public void addImageToDish(Image image) {
+    public void addImageToDish(ImageModel image) {
         image.setDish(this);
         images.add(image);
     }

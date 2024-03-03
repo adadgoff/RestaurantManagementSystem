@@ -15,17 +15,17 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {  // TODO: set up nullable for fields.
+public class OrderModel {  // TODO: set up nullable for fields.
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
-    private List<Dish> cookingDishes = new ArrayList<>();
+    private List<DishModel> cookingDishes = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
-    private List<Dish> cookedDishes = new ArrayList<>();
+    private List<DishModel> cookedDishes = new ArrayList<>();
 
     @Column(name = "cost (rubles)")
     private Long cost;
@@ -42,10 +42,10 @@ public class Order {  // TODO: set up nullable for fields.
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     // TODO: nullable = false.
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserModel user;
 
     @PrePersist
     private void init() {
-        cost = cookingDishes.stream().mapToLong(Dish::getPrice).sum();  // TODO: implement summa cookingDishes.
+        cost = cookingDishes.stream().mapToLong(DishModel::getPrice).sum();
     }
 }

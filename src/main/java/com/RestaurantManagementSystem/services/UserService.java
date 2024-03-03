@@ -1,11 +1,12 @@
 package com.RestaurantManagementSystem.services;
 
-import com.RestaurantManagementSystem.models.User;
+import com.RestaurantManagementSystem.dto.UserDTO;
+import com.RestaurantManagementSystem.mappers.UserMapper;
+import com.RestaurantManagementSystem.models.UserModel;
 import com.RestaurantManagementSystem.models.enums.Role;
 import com.RestaurantManagementSystem.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +17,31 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     // Create.
-    public boolean createUser(User user) {
-        String email = user.getEmail();
+    public boolean createUser(UserDTO userDTO) {
+        UserModel userModel = userMapper.ToModelFromDTO(userDTO);
+
+        String email = userModel.getEmail();
 
         if (userRepository.findByEmail(email) != null) {
-            return false;  // User already exists.
+            return false;  // TODO: implement exception: User already exists.
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.ROLE_USER);
+        userModel.setActive(true);
+        userModel.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userModel.getRoles().add(Role.ROLE_USER);
 
         log.info("Creating new User. email={}", email);
-        userRepository.save(user);
+        userRepository.save(userModel);
 
         return true;
     }
 
     // Read.
-    public User getUserByUUID(UUID uuid) {
-        return userRepository.getReferenceById(uuid);
+    public UserDTO getUserByUUID(UUID uuid) {
+        return userMapper.ToDTOFromModel(userRepository.getReferenceById(uuid));
     }
 }

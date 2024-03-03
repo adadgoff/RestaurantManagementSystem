@@ -1,5 +1,8 @@
 # Конструирование Программного Обеспечения: Домашняя работа №2
 
+## Правила бойцовского клуба
+1. Не использовать значения по умолчанию. Явная инициализация всех полей.
+
 ## Условие
 
 Разработать систему управления заказами в ресторане, которая поддерживает два типа пользователей: посетителей и
@@ -66,6 +69,8 @@ Thymeleaf
 Java Mail Sender
 JDBC API
 
+mapstruct
+
 Spring Data JPA
 Spring Security
 Spring Web
@@ -93,7 +98,8 @@ docker-compose up -d
 |---- java
 |------ com.RestaurantManagementSystem
 |-------- controlles <- "ручки" приложения.
-|-------- models <- связь с БД.
+|-------- dto <- Data Transfer Object, отображения БД.
+|-------- models <- модели БД (Entity).
 |-------- repositories <- .
 |-------- services <- CRUD-операции.
 |-- test
