@@ -9,12 +9,9 @@ import java.security.Principal;
 
 @Component
 public class UserRepositoryExpandingImpl implements UserRepositoryExpanding {
-    private final UserRepository userRepository;
-
+    @Autowired
     @Lazy
-    public UserRepositoryExpandingImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public UserModel findByPrincipal(Principal principal) {

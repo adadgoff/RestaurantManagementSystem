@@ -21,31 +21,25 @@ public class OrderModel {  // TODO: set up nullable for fields.
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
-    private List<DishModel> cookingDishes = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    private List<DishModel> cookingDishes;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
-    private List<DishModel> cookedDishes = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    private List<DishModel> cookedDishes;
 
     @Column(name = "cost (rubles)")
     private Long cost;
 
     @Column(name = "start_time")
-    private Instant startTime = Instant.now();
+    private Instant startTime;
 
     @Column(name = "end_time")
     private Instant endTime;
 
     @Column(name = "status")
-    private Status status = Status.COOKING;
+    private Status status;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    // TODO: nullable = false.
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserModel user;
-
-    @PrePersist
-    private void init() {
-        cost = cookingDishes.stream().mapToLong(DishModel::getPrice).sum();
-    }
 }

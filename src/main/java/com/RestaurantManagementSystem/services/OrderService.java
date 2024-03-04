@@ -2,6 +2,7 @@ package com.RestaurantManagementSystem.services;
 
 import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.dto.OrderDTO;
+import com.RestaurantManagementSystem.mappers.DishMapper;
 import com.RestaurantManagementSystem.mappers.OrderMapper;
 import com.RestaurantManagementSystem.models.DishModel;
 import com.RestaurantManagementSystem.models.OrderModel;
@@ -25,6 +26,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
+    private final DishMapper dishMapper;
+
     private final OrderMapper orderMapper;
     //    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
@@ -37,12 +40,14 @@ public class OrderService {
     public void createOrder(Principal principal, OrderDTO orderDTO) {
         OrderModel orderModel = orderMapper.ToModelFromDTO(orderDTO);
 
-        // TODO: fix - orderModel.setCookedDishes(new ArrayList<>());
+        orderModel.setCookingDishes(orderDTO.getCookingDishes().stream().map(dishMapper::ToModelFromDTO).collect(Collectors.toList()));
         orderModel.setCookedDishes(new ArrayList<>());
         orderModel.setCost(orderDTO.getCookingDishes().stream().mapToLong(DishDTO::getPrice).sum());
         orderModel.setStartTime(Instant.now());
         orderModel.setStatus(Status.COOKING);
         orderModel.setUser(userRepository.findByPrincipal(principal));
+
+        userRepository.findByPrincipal(principal).getOrders().add(orderModel);
 
         log.info("Creating new Order. id={}; dishes to cook ids={}; dishes names={}; status={}; user email={}",
                 orderModel.getId(),
