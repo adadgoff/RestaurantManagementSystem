@@ -2,8 +2,6 @@ create sequence images_seq start with 1 increment by 50;
 create sequence orders_seq start with 1 increment by 50;
 create sequence reviews_seq start with 1 increment by 50;
 
----------------------------------------------------------------------
-
 create table dishes
 (
     cooking_time     numeric(21, 0) not null,
@@ -64,25 +62,10 @@ create table users
     primary key (uuid)
 );
 
----------------------------------------------------------------------
-
-alter table if exists dishes
-    add constraint FK_dishes_orders foreign key (order_id) references orders;
-
-alter table if exists images
-    add constraint FK_images_dishes foreign key (dish_id) references dishes;
-
-alter table if exists orders
-    add constraint FK_orders_users foreign key (user_id) references users;
-
-alter table if exists reviews
-    add constraint FK_reviews_dishes foreign key (dish_id) references dishes;
-
-alter table if exists reviews
-    add constraint FK_reviews_users foreign key (user_id) references users;
-
-alter table if exists user_roles
-    add constraint FK_user_roles_users foreign key (user_id) references users;
-
-alter table if exists users
-    add constraint FK_users_images foreign key (image_id) references images;
+alter table if exists dishes add constraint FK_orders_dishes foreign key (order_id) references orders;
+alter table if exists images add constraint FK_dishes_images foreign key (dish_id) references dishes;
+alter table if exists orders add constraint FK_users_orders foreign key (user_id) references users;
+alter table if exists reviews add constraint FK_dishes_reviews foreign key (dish_id) references dishes;
+alter table if exists reviews add constraint FK_users_reviews foreign key (user_id) references users;
+alter table if exists user_roles add constraint FK_users_user_roles foreign key (user_id) references users;
+alter table if exists users add constraint FK_images_users foreign key (image_id) references images;

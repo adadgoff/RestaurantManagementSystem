@@ -25,6 +25,6 @@ public class ImageModel {
     @Column(name = "img_binary", nullable = false)
     private byte[] imgBinary;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private DishModel dish;
 }
