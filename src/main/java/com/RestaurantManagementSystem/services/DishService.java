@@ -1,10 +1,12 @@
 package com.RestaurantManagementSystem.services;
 
 import com.RestaurantManagementSystem.dto.DishDTO;
+import com.RestaurantManagementSystem.dto.ImageDTO;
+import com.RestaurantManagementSystem.mappers.CycleAvoidingMappingContext;
 import com.RestaurantManagementSystem.mappers.DishMapper;
 import com.RestaurantManagementSystem.models.DishModel;
-import com.RestaurantManagementSystem.models.ImageModel;
 import com.RestaurantManagementSystem.repositories.DishRepository;
+import com.RestaurantManagementSystem.utils.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -21,8 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DishService {
     private final DishRepository dishRepository;
-
-    private final DishMapper dishMapper;
 
     // Read all.
     public List<DishModel> getDishes(String name) {
@@ -33,30 +32,31 @@ public class DishService {
     }
 
     // Create.
-    public void createDish(DishDTO dishDTO, List<MultipartFile> files) throws IOException {
-        DishModel dishModel = dishMapper.ToModelFromDTO(dishDTO);
+    public void createDish(DishDTO dishDTO, List<MultipartFile> files, String cookingTimeStr) throws IOException {
+        dishDTO.setCookingTime(TimeUtils.FromFormatStringHoursMinutesSecondsToDuration(cookingTimeStr));
+        dishDTO.setActive(true);
+        dishDTO.setImages(new ArrayList<>());
 
-        dishModel.setImages(new ArrayList<>());
         for (MultipartFile file : files) {
             if (file.getSize() != 0) {
-                ImageModel imageModel = ImageModel.builder()
+                ImageDTO imageDTO = ImageDTO.builder()
                         .contentType(file.getContentType())
-                        .imgBinary(file.getBytes()).build();
-                dishModel.addImageToDish(imageModel);
+                        .imgBinary(file.getBytes())
+                        .dish(dishDTO)
+                        .build();
+                dishDTO.getImages().add(imageDTO);
             }
         }
 
-        log.info("Creating new Dish. id={}; name={}; price={}; image ids={}",
-                dishModel.getId(),
-                dishModel.getName(),
-                dishModel.getPrice(),
-                dishModel.getImages() != null ? dishModel.getImages().stream().map(ImageModel::getId).collect(Collectors.toList()) : null);
+        DishModel dishModel = DishMapper.INSTANCE.ToModelFromDTO(dishDTO, new CycleAvoidingMappingContext());
         dishRepository.save(dishModel);
+        log.info("Creating new Dish. id={}; name={}; price={}", dishModel.getId(), dishModel.getName(), dishModel.getPrice());
     }
 
     // Read.
     public DishDTO getDishById(Long id) {
-        return dishMapper.ToDTOFromModel(dishRepository.findById(id).orElse(null));
+        DishModel dishModel = dishRepository.findById(id).orElse(null);
+        return DishMapper.INSTANCE.ToDTOFromModel(dishModel, new CycleAvoidingMappingContext());
     }
 
 //    // Update.

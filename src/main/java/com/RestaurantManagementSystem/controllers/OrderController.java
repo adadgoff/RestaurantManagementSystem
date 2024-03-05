@@ -33,12 +33,7 @@ public class OrderController {
     // Create.
     @PostMapping("/order/create")
     public String createOrder(Long idDishToCook, OrderDTO orderDTO, Principal principal) {
-        // TODO: delete 'kostyl'.
-        List<DishDTO> cookingDishes = new ArrayList<>();
-        cookingDishes.add(dishService.getDishById(idDishToCook));
-
-        orderDTO.setCookingDishes(cookingDishes);
-        orderService.createOrder(principal, orderDTO);
+        orderService.createOrder(idDishToCook, orderDTO, principal);
         return "redirect:/order/all";
     }
 }

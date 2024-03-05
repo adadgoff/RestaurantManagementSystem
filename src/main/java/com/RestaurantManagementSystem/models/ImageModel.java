@@ -1,5 +1,6 @@
 package com.RestaurantManagementSystem.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +28,7 @@ public class ImageModel {
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     private DishModel dish;
+
+    @OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "profileIcon")
+    private UserModel user;
 }

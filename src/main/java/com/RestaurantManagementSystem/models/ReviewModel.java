@@ -25,11 +25,11 @@ public class ReviewModel {
     @Column(name = "publish_time", nullable = false)
     private Instant publishTime;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserModel user;
-
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "dish_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dish_id")
     private DishModel dish;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uuid")
+    private UserModel user;
 }

@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 @Service
@@ -17,31 +19,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    // Create.
     public boolean createUser(UserDTO userDTO) {
-        UserModel userModel = userMapper.ToModelFromDTO(userDTO);
-
-        String email = userModel.getEmail();
-
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(userDTO.getEmail()) != null) {
             return false;  // TODO: implement exception: User already exists.
         }
 
-        userModel.setActive(true);
-        userModel.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userModel.getRoles().add(Role.ROLE_USER);
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userDTO.setActive(true);
+        // TODO: implement profileIcon.
+        userDTO.setRoles(new HashSet<>(Collections.singleton(Role.ROLE_USER)));
 
-        log.info("Creating new User. email={}", email);
+        UserModel userModel = UserMapper.INSTANCE.ToModelFromDTO(userDTO);
         userRepository.save(userModel);
-
+        log.info("Creating new User. email={}", userModel.getEmail());
         return true;
     }
 
-    // Read.
     public UserDTO getUserByUUID(UUID uuid) {
-        return userMapper.ToDTOFromModel(userRepository.getReferenceById(uuid));
+        return UserMapper.INSTANCE.ToDTOFromModel(userRepository.getReferenceById(uuid));
     }
 }

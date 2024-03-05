@@ -27,8 +27,7 @@ public class UserController {
     public String registerUser(UserDTO userDTO, Model model) {
         if (!userService.createUser(userDTO)) {
             // TODO: show error in html.
-            model.addAttribute("errorMessage", "Пользователь с email="
-                    + userDTO.getEmail() + " уже существует.");
+            model.addAttribute("errorMessage", "Пользователь с email=" + userDTO.getEmail() + " уже существует.");
             return "registration";
         }
         return "redirect:/login";

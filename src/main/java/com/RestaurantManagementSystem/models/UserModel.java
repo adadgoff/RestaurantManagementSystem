@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Duration;
 import java.util.*;
 
 @Entity
@@ -18,35 +19,37 @@ import java.util.*;
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid")
     private UUID uuid;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "active", nullable = false)
-    private boolean active;
+    private Boolean active;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private ImageModel profileIcon;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_uuid")
+    )
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    private List<OrderModel> orders = new ArrayList<>();
+    private List<OrderModel> orders;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    private List<ReviewModel> reviews = new ArrayList<>();
+    private List<ReviewModel> reviews;
 
     // Security.
 

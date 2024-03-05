@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,25 +20,36 @@ public class OrderModel {  // TODO: set up nullable for fields.
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "order_cooking_dishes",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "dish_id")
+    )
     private List<DishModel> cookingDishes;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "order_cooked_dishes",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "dish_id")
+    )
     private List<DishModel> cookedDishes;
 
-    @Column(name = "cost (rubles)")
+    @Column(name = "cost (rubles)", nullable = false)
     private Long cost;
 
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     private Instant startTime;
 
     @Column(name = "end_time")
     private Instant endTime;
 
-    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_uuid")
     private UserModel user;
 }

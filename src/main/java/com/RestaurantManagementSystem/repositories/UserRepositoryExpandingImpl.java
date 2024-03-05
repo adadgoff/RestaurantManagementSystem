@@ -9,7 +9,7 @@ import java.security.Principal;
 
 @Component
 public class UserRepositoryExpandingImpl implements UserRepositoryExpanding {
-    @Autowired
+    @Autowired  // TODO: maybe delete.
     @Lazy
     private UserRepository userRepository;
 

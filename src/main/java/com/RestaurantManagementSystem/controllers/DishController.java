@@ -3,7 +3,6 @@ package com.RestaurantManagementSystem.controllers;
 import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.services.DishService;
-import com.RestaurantManagementSystem.utils.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +34,7 @@ public class DishController {
     // Create.
     @PostMapping("/dish/create")
     public String createDish(@RequestParam("files") List<MultipartFile> files, String cookingTimeStr, DishDTO dishDTO) throws IOException {
-        dishDTO.setCookingTime(TimeUtils.FromFormatStringHoursMinutesSecondsToDuration(cookingTimeStr));
-        dishService.createDish(dishDTO, files);
+        dishService.createDish(dishDTO, files, cookingTimeStr);
         return "redirect:/dish/all";
     }
 
