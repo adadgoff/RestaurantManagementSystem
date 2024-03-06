@@ -1,27 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Restaurant Management System (RMS)</title>
-</head>
+<#include "../components/header.ftlh">
 
-<body>
-<h1>Restaurant Management System (RMS)</h1>
+<h3>Подробная информация о блюде(id=${dish.id}, название=${dish.name})</h3>
+
 <hr>
 
 <#if dish??>
-    <h4>Подробная информация о блюде</h4>
-    <hr>
-
+    <b>Id блюда: </b>${dish.id}<br>
     <b>Название блюда: </b>${dish.name}<br>
     <b>Описание блюда: </b>${dish.description}<br>
     <b>Цена блюда: </b>${dish.price} руб.<br>
     <b>Время приготовления
         блюда: </b>${dish.getCookingTime().toHoursPart()} ч / ${dish.getCookingTime().toMinutesPart()} мин / ${dish.getCookingTime().toSecondsPart()} с
     <br>
-    <b>Количество блюд: </b>${dish.count} шт.<br>
-    <b>Вес блюда: </b>${dish.weight} г.<br>
-    <hr>
-
+    <b>Количество блюд: </b>${dish.count} штук<br>
+    <b>Вес блюда: </b>${dish.weight} (в граммах)<br>
     <#if dish.getImages()?has_content>
         <b>Изображения блюда: </b><br>
         <ul>
@@ -33,11 +25,11 @@
         <b>Изображений блюда нет.</b><br>
     </#if>
 
-<#--  TODO: отзывы  -->
+<#--  TODO: reviews  -->
+
 <#else>
     <h4>Блюдо с таким id не существует.</h4>
     <hr>
 </#if>
 
-</body>
-</html>
+<#include "../components/footer.ftlh">

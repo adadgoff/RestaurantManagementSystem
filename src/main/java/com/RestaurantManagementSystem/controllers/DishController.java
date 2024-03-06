@@ -16,7 +16,7 @@ public class DishController {
     @GetMapping("/dish/menu")
     public String getUserDishes(@RequestParam(name = "name", required = false) String name, Model model) {
         model.addAttribute("dishes", dishService.getDishes(name, true));
-        return "dishes";
+        return "user/dish_menu";
     }
 
     @GetMapping("/dish/{id}")
