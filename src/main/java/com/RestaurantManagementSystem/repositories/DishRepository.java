@@ -6,10 +6,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-//@Transactional
 @Repository
 public interface DishRepository extends JpaRepository<DishModel, Long> {
-    List<DishModel> findByName(String Name);
+    List<DishModel> findAllByOrderByName();
 
-    List<DishModel> findAllByName(String Name);
+    List<DishModel> findAllByActiveOrderByName(Boolean active);
+
+    List<DishModel> findAllByNameOrderByName(String name);
+
+    List<DishModel> findAllByNameAndActiveOrderByName(String name, Boolean active);
 }

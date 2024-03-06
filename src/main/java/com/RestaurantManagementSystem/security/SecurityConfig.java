@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/dish/all", true)
+                        .defaultSuccessUrl("/admin/dish/panel", true)
                 )
                 .logout(logout -> logout.permitAll())
         ;

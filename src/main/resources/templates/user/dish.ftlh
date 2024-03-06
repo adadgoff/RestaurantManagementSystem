@@ -33,10 +33,7 @@
         <b>Изображений блюда нет.</b><br>
     </#if>
 
-    <form action="/dish/delete/${dish.id}" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <input type="submit" value="Удалить блюдо">
-    </form>
+<#--  TODO: отзывы  -->
 <#else>
     <h4>Блюдо с таким id не существует.</h4>
     <hr>

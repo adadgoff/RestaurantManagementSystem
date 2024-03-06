@@ -12,7 +12,7 @@
 </form>
 <hr>
 
-<h4>Меню</h4>
+<h3>Меню</h3>
 <hr>
 
 <form action="/dish/all" method="get">

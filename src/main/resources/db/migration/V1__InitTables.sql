@@ -45,6 +45,7 @@ create table orders
 );
 create table reviews
 (
+    rating       smallint                    not null check (rating between 0 and 4),
     dish_id      bigint,
     id           bigint                      not null,
     publish_time timestamp(6) with time zone not null,
