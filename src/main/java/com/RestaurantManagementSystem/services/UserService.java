@@ -8,6 +8,7 @@ import com.RestaurantManagementSystem.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class UserService {
 
     public boolean createUser(UserDTO userDTO) {
         if (userRepository.findByEmail(userDTO.getEmail()) != null) {
-            return false;  // TODO: implement exception: User already exists.
+            return false;  // TODO: implement exception: Email is already busy.
         }
 
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));

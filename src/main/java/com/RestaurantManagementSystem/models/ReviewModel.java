@@ -1,6 +1,7 @@
 package com.RestaurantManagementSystem.models;
 
 
+import com.RestaurantManagementSystem.models.enums.Rating;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,9 @@ public class ReviewModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "rating", nullable = false)
+    private Rating rating;
 
     @Column(name = "text", nullable = false)
     private String text;

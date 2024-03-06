@@ -4,9 +4,7 @@ import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.models.DishModel;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
 
 @Mapper(componentModel = "spring")
 public interface DishMapper {

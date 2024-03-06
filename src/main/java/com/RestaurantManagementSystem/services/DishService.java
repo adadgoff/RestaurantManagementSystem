@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,11 +25,14 @@ public class DishService {
     private final DishRepository dishRepository;
 
     // Read all.
-    public List<DishModel> getDishes(String name) {
-        if (name != null && !name.isBlank()) {
-            return dishRepository.findAllByName(name);
-        }
-        return dishRepository.findAll();
+    public List<DishDTO> getDishes(String name) {
+        List<DishModel> dishModels = (name != null && !name.isBlank()) ?
+                dishRepository.findAllByName(name) :
+                dishRepository.findAll();
+
+        return dishModels.stream()
+                .map(dishModel -> DishMapper.INSTANCE.ToDTOFromModel(dishModel, new CycleAvoidingMappingContext()))
+                .collect(Collectors.toList());
     }
 
     // Create.
@@ -56,6 +60,7 @@ public class DishService {
     // Read.
     public DishDTO getDishById(Long id) {
         DishModel dishModel = dishRepository.findById(id).orElse(null);
+
         return DishMapper.INSTANCE.ToDTOFromModel(dishModel, new CycleAvoidingMappingContext());
     }
 

@@ -4,7 +4,6 @@ import com.RestaurantManagementSystem.dto.ImageDTO;
 import com.RestaurantManagementSystem.models.ImageModel;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")

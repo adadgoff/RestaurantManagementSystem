@@ -27,43 +27,44 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final DishRepository dishRepository;
     private final OrderRepository orderRepository;
-    private final DishMapper dishMapper;
-    private final OrderMapper orderMapper;
     //    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
     // Read all.
     public List<OrderDTO> getOrders() {
-        return orderRepository.findAll().stream().map(orderMapper::ToDTOFromModel).collect(Collectors.toList());
+        return orderRepository.findAll().stream()
+                .map(orderModel -> OrderMapper.INSTANCE.ToDTOFromModel(orderModel, new CycleAvoidingMappingContext()))
+                .collect(Collectors.toList());
     }
 
     // Create. TODO: implement many dishes in order.
     public void createOrder(Long idDishToCook, OrderDTO orderDTO, Principal principal) {
-        orderDTO.setCookingDishes(
-                Collections.singletonList(
-                        dishMapper.ToDTOFromModel(
-                                dishRepository.findById(idDishToCook).orElse(null),
-                                new CycleAvoidingMappingContext())
-                )
-        );
-        orderDTO.setCookedDishes(new ArrayList<>());
-        orderDTO.setCost(orderDTO.getCookingDishes().stream().mapToLong(DishDTO::getPrice).sum());
-        orderDTO.setStartTime(Instant.now());
-        orderDTO.setStatus(Status.COOKING);
 
-        OrderModel orderModel = orderMapper.ToModelFromDTO(orderDTO);
-        orderRepository.save(orderModel);
-        log.info("Creating new Order. id={}; dishes to cook ids={}; dishes names={}; status={}; user email={}",
-                orderModel.getId(),
-                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
-                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
-                orderModel.getStatus(),
-                orderModel.getUser().getEmail()
-        );
+        //        orderDTO.setCookingDishes(
+//                Collections.singletonList(
+//                        DishMapper.INSTANCE.ToDTOFromModel(
+//                                dishRepository.findById(idDishToCook).orElse(null),
+//                                new CycleAvoidingMappingContext())
+//                )
+//        );
+//        orderDTO.setCookedDishes(new ArrayList<>());
+//        orderDTO.setCost(orderDTO.getCookingDishes().stream().mapToLong(DishDTO::getPrice).sum());
+//        orderDTO.setStartTime(Instant.now());
+//        orderDTO.setStatus(Status.COOKING);
+//
+//        OrderModel orderModel = OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext());
+//        orderRepository.save(orderModel);
+//        log.info("Creating new Order. id={}; dishes to cook ids={}; dishes names={}; status={}; user email={}",
+//                orderModel.getId(),
+//                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
+//                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
+//                orderModel.getStatus(),
+//                orderModel.getUser().getEmail()
+//        );
     }
 
     // Read.
     public OrderDTO getOrderById(Long id) {
-        return orderMapper.ToDTOFromModel(orderRepository.findById(id).orElse(null));
+        return OrderMapper.INSTANCE.ToDTOFromModel(orderRepository.findById(id).orElse(null), new CycleAvoidingMappingContext());
     }
 
     // Update.
