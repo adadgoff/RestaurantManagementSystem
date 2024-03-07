@@ -11,7 +11,7 @@ create table dishes
     count            bigint         not null,
     id               bigint         not null,
     "price (rubles)" bigint         not null,
-    description      varchar(255),
+    description      varchar(1024),
     name             varchar(255)   not null unique,
     primary key (id)
 );
@@ -50,7 +50,7 @@ create table reviews
     id           bigint                      not null,
     publish_time timestamp(6) with time zone not null,
     user_uuid    uuid,
-    text         varchar(255)                not null,
+    text         varchar(1024)                not null,
     primary key (id)
 );
 create table user_roles

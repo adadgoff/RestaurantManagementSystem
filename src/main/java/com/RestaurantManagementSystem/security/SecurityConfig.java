@@ -1,6 +1,7 @@
 package com.RestaurantManagementSystem.security;
 
 import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
+import com.RestaurantManagementSystem.models.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,12 +22,13 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/image/**", "/dish/**", "/registration").permitAll()
+                        .requestMatchers("admin/**").hasRole("ADMIN")  // TODO: ADMIN cant use UserRequests, USER cant use AdminRequests.
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/admin/dish/panel", true)
+                        .defaultSuccessUrl("/hello", true)
                 )
                 .logout(logout -> logout.permitAll())
         ;

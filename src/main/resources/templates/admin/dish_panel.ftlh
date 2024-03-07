@@ -29,6 +29,8 @@
 
 <h3>Все блюда</h3>
 
+<hr>
+
 <form action="/admin/dish/panel" method="get">
     <input type="hidden" name="_csrf" value="${_csrf.token}">
 
@@ -54,12 +56,12 @@
             <td>${dish.name}</td>
             <td>${dish.price} руб</td>
             <td>${dish.cookingTime.toHoursPart()} часов / ${dish.cookingTime.toMinutesPart()} минут
-                / ${dish.cookingTime.toMinutesPart()} секунд
+                / ${dish.cookingTime.toSecondsPart()} секунд
             </td>
             <td>${dish.count} (в штуках)</td>
             <td>${dish.weight} (в граммах)</td>
             <td>${dish.active?c}</td>
-            <td><a href="/admin/dish/${dish.id}">подробнее/редактировать</a></td>
+            <td><a href="/admin/dish/${dish.id}" target="_blank">подробнее/редактировать</a></td>
             <td>
                 <form action="/admin/dish/delete/${dish.id}" method="post">
                     <input type="hidden" name="_csrf" value="${_csrf.token}">

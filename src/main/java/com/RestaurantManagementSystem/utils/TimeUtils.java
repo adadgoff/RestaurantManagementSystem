@@ -1,7 +1,10 @@
 package com.RestaurantManagementSystem.utils;
 
-import java.time.Duration;
+import lombok.Builder;
 
+import java.time.*;
+
+@Builder
 public class TimeUtils {
     /**
      * Return Duration from a string in format "HH:mm:ss".
@@ -15,5 +18,10 @@ public class TimeUtils {
         int seconds = Integer.parseInt(parts[2]);
 
         return Duration.ofHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    }
+
+    public static LocalDateTime FromInstantToMoscowDateTime(Instant instant) {
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of("Europe/Moscow"));
+        return zonedDateTime.toLocalDateTime();
     }
 }

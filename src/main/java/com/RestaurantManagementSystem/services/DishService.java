@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class DishService {
     private final DishRepository dishRepository;
 
-    // Read all. Same methods for USER and ADMIN, but some fields are not displayed for USER.
+    // Same methods for USER and ADMIN, but some fields are not displayed for USER.
     public List<DishDTO> getDishes(String name, Boolean onlyActive) {
         // TODO: Сделать, чтобы != name, а просто dish.name.contains(name).
         List<DishModel> dishModels;
@@ -43,13 +43,12 @@ public class DishService {
                 .collect(Collectors.toList());
     }
 
-    // Read. Same methods for USER and ADMIN, but some fields are not displayed for USER.
+    // Same methods for USER and ADMIN, but some fields are not displayed for USER.
     public DishDTO getDishById(Long id) {
         DishModel dishModel = dishRepository.findById(id).orElse(null);
         return DishMapper.INSTANCE.ToDTOFromModel(dishModel, new CycleAvoidingMappingContext());
     }
 
-    // Create.
     public void createDish(DishDTO dishDTO, List<MultipartFile> files, String cookingTimeStr) throws IOException {
         dishDTO.setCookingTime(TimeUtils.FromFormatStringHoursMinutesSecondsToDuration(cookingTimeStr));
         dishDTO.setImages(new ArrayList<>());
@@ -100,7 +99,6 @@ public class DishService {
         log.info("Updating new Dish. id={}; name={}; price={}", dishModel.getId(), dishModel.getName(), dishModel.getPrice());
     }
 
-    // Delete.
     public void deleteDish(Long id) {
         dishRepository.deleteById(id);
         log.info("Deleting Dish. id={}", id);

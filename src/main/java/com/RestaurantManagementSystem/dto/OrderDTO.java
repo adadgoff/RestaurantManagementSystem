@@ -15,4 +15,5 @@ public class OrderDTO {
     private Instant startTime;
     private Instant endTime;
     private Status status;
+    private UserDTO user;
 }

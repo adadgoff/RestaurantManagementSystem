@@ -1,6 +1,7 @@
 package com.RestaurantManagementSystem.services;
 
 import com.RestaurantManagementSystem.dto.UserDTO;
+import com.RestaurantManagementSystem.mappers.CycleAvoidingMappingContext;
 import com.RestaurantManagementSystem.mappers.UserMapper;
 import com.RestaurantManagementSystem.models.UserModel;
 import com.RestaurantManagementSystem.models.enums.Role;
@@ -32,13 +33,13 @@ public class UserService {
         // TODO: implement profileIcon.
         userDTO.setRoles(new HashSet<>(Collections.singleton(Role.ROLE_USER)));
 
-        UserModel userModel = UserMapper.INSTANCE.ToModelFromDTO(userDTO);
+        UserModel userModel = UserMapper.INSTANCE.ToModelFromDTO(userDTO, new CycleAvoidingMappingContext());
         userRepository.save(userModel);
         log.info("Creating new User. email={}", userModel.getEmail());
         return true;
     }
 
     public UserDTO getUserByUUID(UUID uuid) {
-        return UserMapper.INSTANCE.ToDTOFromModel(userRepository.getReferenceById(uuid));
+        return UserMapper.INSTANCE.ToDTOFromModel(userRepository.getReferenceById(uuid), new CycleAvoidingMappingContext());
     }
 }
