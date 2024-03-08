@@ -1,7 +1,9 @@
 package com.RestaurantManagementSystem.services;
 
+import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.dto.OrderDTO;
+import com.RestaurantManagementSystem.kitchen.Kitchen;
 import com.RestaurantManagementSystem.mappers.CycleAvoidingMappingContext;
 import com.RestaurantManagementSystem.mappers.DishMapper;
 import com.RestaurantManagementSystem.mappers.OrderMapper;
@@ -15,6 +17,7 @@ import com.RestaurantManagementSystem.repositories.UserRepository;
 import com.RestaurantManagementSystem.utils.OrderUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -34,7 +37,7 @@ public class OrderService {
 
     private final OrderUtils orderUtils;
 
-//    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
+    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
     public OrderDTO getOrderById(Long id) {
         return OrderMapper.INSTANCE.ToDTOFromModel(
@@ -75,7 +78,7 @@ public class OrderService {
         orderDTO.setUser(UserMapper.INSTANCE.ToDTOFromModel(userRepository.findByPrincipal(principal), new CycleAvoidingMappingContext()));
         orderDTO.setPaid(false);
 
-//        kitchen.addOrder(orderDTO);
+        kitchen.addOrder(orderDTO);
 
         OrderModel orderModel = orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
         log.info("Creating new Order. id={}; dishes names={}; status={}; user email={}",
