@@ -9,6 +9,7 @@ import com.RestaurantManagementSystem.repositories.DishRepository;
 import com.RestaurantManagementSystem.utils.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class DishService {
-    private final DishRepository dishRepository;
+    @Autowired
+    private DishRepository dishRepository;
 
     // NOTE Same methods for USER and ADMIN, but some fields are not displayed for USER.
     public List<DishDTO> getDishes(String name, Boolean onlyActive) {
@@ -65,6 +67,7 @@ public class DishService {
             }
         }
 
+        // TODO: better to get new DTO fields.
         DishModel dishModel = DishMapper.INSTANCE.ToModelFromDTO(dishDTO, new CycleAvoidingMappingContext());
         dishRepository.save(dishModel);
         log.info("Creating new Dish. id={}; name={}; price={}", dishModel.getId(), dishModel.getName(), dishModel.getPrice());

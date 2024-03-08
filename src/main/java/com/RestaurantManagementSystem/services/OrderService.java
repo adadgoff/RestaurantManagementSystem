@@ -17,22 +17,26 @@ import com.RestaurantManagementSystem.utils.OrderUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OrderService {
-    private final DishRepository dishRepository;
-    private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    @Autowired
+    private DishRepository dishRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     private final OrderUtils orderUtils;
 
@@ -57,7 +61,7 @@ public class OrderService {
         }
 
         OrderDTO orderDTO = new OrderDTO();
-        List<DishDTO> waitingDishes = new ArrayList<>();
+        ConcurrentLinkedQueue<DishDTO> waitingDishes = new ConcurrentLinkedQueue<>();
         for (Long dishId : dishCounts.keySet()) {
             DishDTO waitingDish = DishMapper.INSTANCE.ToDTOFromModel(
                     dishRepository.findById(dishId).orElseThrow(), new CycleAvoidingMappingContext());
@@ -70,15 +74,16 @@ public class OrderService {
         }
 
         orderDTO.setWaitingDishes(waitingDishes);
-        orderDTO.setCookingDishes(new ArrayList<>());
-        orderDTO.setCookedDishes(new ArrayList<>());
+        orderDTO.setCookingDishes(new ConcurrentLinkedQueue<>());
+        orderDTO.setCookedDishes(new ConcurrentLinkedQueue<>());
         orderDTO.setCost(waitingDishes.stream().mapToLong(DishDTO::getPrice).sum());
         orderDTO.setStartTime(Instant.now());
         orderDTO.setStatus(Status.COOKING);
         orderDTO.setUser(UserMapper.INSTANCE.ToDTOFromModel(userRepository.findByPrincipal(principal), new CycleAvoidingMappingContext()));
         orderDTO.setPaid(false);
 
-        OrderModel orderModel = orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
+        OrderModel orderModel = orderRepository.save(
+                OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
 
         kitchenService.addOrder(orderDTO);
 
