@@ -45,7 +45,7 @@ public class DishService {
 
     // Same methods for USER and ADMIN, but some fields are not displayed for USER.
     public DishDTO getDishById(Long id) {
-        DishModel dishModel = dishRepository.findById(id).orElse(null);
+        DishModel dishModel = dishRepository.findById(id).orElseThrow();
         return DishMapper.INSTANCE.ToDTOFromModel(dishModel, new CycleAvoidingMappingContext());
     }
 

@@ -18,7 +18,7 @@
         <b>Изображения блюда: </b><br>
         <ul>
             <#list dish.getImages() as image>
-                <li><img src="/image/${image.id}" height="60px" alt="img"></li>
+                <li><img src="/image/${image.id}" height="100px" alt="img"></li>
             </#list>
         </ul>
     <#else>

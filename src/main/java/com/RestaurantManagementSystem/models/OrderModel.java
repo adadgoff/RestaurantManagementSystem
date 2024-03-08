@@ -22,6 +22,14 @@ public class OrderModel {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
+            name = "order_waiting_dishes",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "dish_id")
+    )
+    private List<DishModel> waitingDishes;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
             name = "order_cooking_dishes",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "dish_id")
@@ -52,4 +60,7 @@ public class OrderModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uuid")
     private UserModel user;
+
+    @Column(name = "paid", nullable = false)
+    private Boolean paid;
 }

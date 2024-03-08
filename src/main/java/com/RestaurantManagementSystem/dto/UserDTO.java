@@ -2,6 +2,7 @@ package com.RestaurantManagementSystem.dto;
 
 import com.RestaurantManagementSystem.models.enums.Role;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.Set;
@@ -14,8 +15,11 @@ public class UserDTO {
     private String name;
     private String password;
     private boolean active;
+    @EqualsAndHashCode.Exclude
     private ImageDTO profileIcon;
     private Set<Role> roles;
+    @EqualsAndHashCode.Exclude
     private List<OrderDTO> orders;
+    @EqualsAndHashCode.Exclude
     private List<ReviewDTO> reviews;
 }

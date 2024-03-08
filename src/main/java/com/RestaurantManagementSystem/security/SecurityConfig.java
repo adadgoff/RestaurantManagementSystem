@@ -1,7 +1,7 @@
 package com.RestaurantManagementSystem.security;
 
 import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
-import com.RestaurantManagementSystem.models.enums.Role;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,16 +19,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/image/**", "/dish/**", "/registration").permitAll()
-                        .requestMatchers("admin/**").hasRole("ADMIN")  // TODO: ADMIN cant use UserRequests, USER cant use AdminRequests.
-                        .anyRequest().authenticated()
+        httpSecurity.authorizeHttpRequests(
+                        requests -> requests
+                                .requestMatchers("/image/**", "/dish/**", "/registration").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")  // TODO: ADMIN cant use UserRequests, USER cant use AdminRequests.
+                                .anyRequest().authenticated()  // TODO: user can watch only his orders. Spring EL expressions
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/hello", true)
+                        .defaultSuccessUrl("/info", true)
                 )
                 .logout(logout -> logout.permitAll())
         ;

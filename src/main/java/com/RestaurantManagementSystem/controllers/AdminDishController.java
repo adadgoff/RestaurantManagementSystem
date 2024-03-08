@@ -39,15 +39,13 @@ public class AdminDishController {
         return "redirect:/admin/dish/panel";
     }
 
-    @PostMapping("/admin/dish/update")
-//    @PatchMapping("/admin/dish/update/{id}")  // не использовал, так как html формы не имеют method="patch".
+    @PostMapping("/admin/dish/update")  // TODO: make with id.
     public String updateDish(DishDTO updatedDTO, @RequestParam("files") List<MultipartFile> files, String cookingTimeStr) throws IOException {
         dishService.updateDish(updatedDTO, files, cookingTimeStr);
         return "redirect:/admin/dish/{id}";
     }
 
-    @PostMapping("/admin/dish/delete/{id}")  // TODO: изменить на более безопасную версию.
-//    @DeleteMapping("/admin/dish/delete/{id}")  // не использовал, так как html формы не имеют method="delete".
+    @PostMapping("/admin/dish/delete/{id}")
     public String deleteDish(@PathVariable Long id) {
         dishService.deleteDish(id);
         return "redirect:/admin/dish/panel";

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-//@RestController() // TODO: write prefix.
 public class DishController {
     private final DishService dishService;
 

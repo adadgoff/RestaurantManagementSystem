@@ -2,10 +2,6 @@ package com.RestaurantManagementSystem.services;
 
 import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.dto.OrderDTO;
-import com.RestaurantManagementSystem.exceptions.orderExceptions.CreateOrderException;
-import com.RestaurantManagementSystem.exceptions.orderExceptions.GetOrderException;
-import com.RestaurantManagementSystem.exceptions.orderExceptions.UpdateOrderException;
-import com.RestaurantManagementSystem.exceptions.userExceptions.InvalidUserException;
 import com.RestaurantManagementSystem.mappers.CycleAvoidingMappingContext;
 import com.RestaurantManagementSystem.mappers.DishMapper;
 import com.RestaurantManagementSystem.mappers.OrderMapper;
@@ -16,6 +12,7 @@ import com.RestaurantManagementSystem.models.enums.Status;
 import com.RestaurantManagementSystem.repositories.DishRepository;
 import com.RestaurantManagementSystem.repositories.OrderRepository;
 import com.RestaurantManagementSystem.repositories.UserRepository;
+import com.RestaurantManagementSystem.utils.OrderUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +22,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,14 +31,15 @@ public class OrderService {
     private final DishRepository dishRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    //    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
 
-    public OrderDTO getOrderById(Long id, Principal principal) throws GetOrderException {
-        OrderDTO orderDTO = OrderMapper.INSTANCE.ToDTOFromModel(orderRepository.findById(id).orElseThrow(), new CycleAvoidingMappingContext());
-        if (!Objects.equals(orderDTO.getUser().getEmail(), userRepository.findByPrincipal(principal).getEmail())) {
-            throw new GetOrderException("Доступ запрещен.");
-        }
-        return orderDTO;
+    private final OrderUtils orderUtils;
+
+//    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
+
+    public OrderDTO getOrderById(Long id) {
+        return OrderMapper.INSTANCE.ToDTOFromModel(
+                orderRepository.findById(id).orElseThrow(), new CycleAvoidingMappingContext()
+        );
     }
 
     public List<OrderDTO> getOrders(Principal principal) {
@@ -52,73 +49,77 @@ public class OrderService {
     }
 
     public void createOrder(Map<Long, Long> dishCounts, Principal principal) {
-        OrderDTO orderDTO = new OrderDTO();
-
-        List<DishDTO> cookingDishes = new ArrayList<>();
-        for (Long dishId : dishCounts.keySet()) {
-            DishDTO cookingDish = DishMapper.INSTANCE.ToDTOFromModel(dishRepository.findById(dishId).orElseThrow(), new CycleAvoidingMappingContext());
-            long count = dishCounts.get(dishId);
-            if (count > cookingDish.getCount()) {
-                throw new CreateOrderException("Запрещено заказывать больше блюд, чем их оставшееся количество в ресторане.");
-            }
-            for (long i = 0; i < count; i++) {
-                cookingDishes.add(cookingDish);
-            }
-            cookingDish.setCount(cookingDish.getCount() - count);
-            dishRepository.save(DishMapper.INSTANCE.ToModelFromDTO(cookingDish, new CycleAvoidingMappingContext()));
+        if (!orderUtils.isValidCounts(dishCounts)) {
+            return;
         }
 
-        orderDTO.setCookingDishes(cookingDishes);
+        OrderDTO orderDTO = new OrderDTO();
+        List<DishDTO> waitingDishes = new ArrayList<>();
+        for (Long dishId : dishCounts.keySet()) {
+            DishDTO waitingDish = DishMapper.INSTANCE.ToDTOFromModel(
+                    dishRepository.findById(dishId).orElseThrow(), new CycleAvoidingMappingContext());
+            long count = dishCounts.get(dishId);
+            for (long i = 0; i < count; i++) {
+                waitingDishes.add(waitingDish);
+            }
+            waitingDish.setCount(waitingDish.getCount() - count);
+            dishRepository.save(DishMapper.INSTANCE.ToModelFromDTO(waitingDish, new CycleAvoidingMappingContext()));
+        }
+
+        orderDTO.setWaitingDishes(waitingDishes);
+        orderDTO.setCookingDishes(new ArrayList<>());
         orderDTO.setCookedDishes(new ArrayList<>());
-        orderDTO.setCost(cookingDishes.stream().mapToLong(DishDTO::getPrice).sum());
+        orderDTO.setCost(waitingDishes.stream().mapToLong(DishDTO::getPrice).sum());
         orderDTO.setStartTime(Instant.now());
         orderDTO.setStatus(Status.COOKING);
         orderDTO.setUser(UserMapper.INSTANCE.ToDTOFromModel(userRepository.findByPrincipal(principal), new CycleAvoidingMappingContext()));
+        orderDTO.setPaid(false);
 
-        // TODO: закинуть заказ на кухню + обновить БД.
+//        kitchen.addOrder(orderDTO);
 
         OrderModel orderModel = orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
-        log.info("Creating new Order. id={}; dishes to cook ids={}; dishes names={}; status={}; user email={}",
+        log.info("Creating new Order. id={}; dishes names={}; status={}; user email={}",
                 orderModel.getId(),
-                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
-                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
+                orderModel.getWaitingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
                 orderModel.getStatus(),
                 orderModel.getUser().getEmail()
         );
     }
 
-    public void updateOder(OrderDTO orderDTO, Map<Long, Long> dishCounts, Principal principal) {
-        // User verification.
-        if (!Objects.equals(principal.getName(), orderDTO.getUser().getEmail())) {
-            throw new InvalidUserException("Доступ запрещен.");
+    public void updateOder(OrderDTO orderDTO, Map<Long, Long> dishCounts) {
+        if (!orderUtils.isCookingStatus(orderDTO) || !orderUtils.isValidCounts(dishCounts)) {
+            return;
         }
 
-        // Status order verification.
-        if (orderDTO.getStatus() != Status.COOKING) {
-            throw new UpdateOrderException("Запрещено добавлять блюдо в заказ с отличным от COOKING статусом.");
-        }
-
-        List<DishDTO> addedCookingDishes = orderDTO.getCookingDishes();
+        long addedCost = 0;
         for (Long dishId : dishCounts.keySet()) {
-            DishDTO addedCookingDish = DishMapper.INSTANCE.ToDTOFromModel(dishRepository.findById(dishId).orElseThrow(), new CycleAvoidingMappingContext());
+            DishDTO addedWaitingDish = DishMapper.INSTANCE.ToDTOFromModel(dishRepository.findById(dishId).orElseThrow(), new CycleAvoidingMappingContext());
             long count = dishCounts.get(dishId);
-            if (count > addedCookingDish.getCount()) {
-                throw new CreateOrderException("Запрещено заказывать больше блюд, чем их оставшееся количество в ресторане.");
-            }
             for (long i = 0; i < count; i++) {
-                addedCookingDishes.add(addedCookingDish);
+                orderDTO.getWaitingDishes().add(addedWaitingDish);
             }
-            addedCookingDish.setCount(addedCookingDish.getCount() - count);
-            dishRepository.save(DishMapper.INSTANCE.ToModelFromDTO(addedCookingDish, new CycleAvoidingMappingContext()));
+            addedCost += addedWaitingDish.getPrice() * count;
+            addedWaitingDish.setCount(addedWaitingDish.getCount() - count);
+            dishRepository.save(DishMapper.INSTANCE.ToModelFromDTO(addedWaitingDish, new CycleAvoidingMappingContext()));
         }
+
+        orderDTO.setWaitingDishes(orderDTO.getWaitingDishes());
+        orderDTO.setCost(orderDTO.getCost() + addedCost);
 
         OrderModel orderModel = orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
-        log.info("Updating Order. id={}; dishes to cook ids={}; dishes names={}; status={}; user email={}",
+        log.info("Updating Order. id={}; new dishes names={}; status={}; user email={}",
                 orderModel.getId(),
-                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
-                orderModel.getCookingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
+                orderModel.getWaitingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
                 orderModel.getStatus(),
                 orderModel.getUser().getEmail()
         );
+    }
+
+    public void cancelOrder(OrderDTO orderDTO) {  // TODO: only own user can cancel.
+        if (!orderUtils.isCookingStatus(orderDTO)) {
+            return;
+        }
+
+
     }
 }

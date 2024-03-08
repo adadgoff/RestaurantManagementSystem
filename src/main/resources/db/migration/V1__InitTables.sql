@@ -33,8 +33,14 @@ create table order_cooking_dishes
     dish_id  bigint not null,
     order_id bigint not null
 );
+create table order_waiting_dishes
+(
+    dish_id  bigint not null,
+    order_id bigint not null
+);
 create table orders
 (
+    paid            boolean                     not null,
     "cost (rubles)" bigint                      not null,
     end_time        timestamp(6) with time zone,
     id              bigint                      not null,
@@ -50,7 +56,7 @@ create table reviews
     id           bigint                      not null,
     publish_time timestamp(6) with time zone not null,
     user_uuid    uuid,
-    text         varchar(1024)                not null,
+    text         varchar(2048)               not null,
     primary key (id)
 );
 create table user_roles
@@ -79,6 +85,10 @@ alter table if exists order_cooking_dishes
     add constraint FK_order_cooking_dishes_dish foreign key (dish_id) references dishes;
 alter table if exists order_cooking_dishes
     add constraint FK_order_cooking_dishes_order foreign key (order_id) references orders;
+alter table if exists order_waiting_dishes
+    add constraint FK_order_waiting_dishes_dish foreign key (dish_id) references dishes;
+alter table if exists order_waiting_dishes
+    add constraint FK_order_waiting_dishes_order foreign key (order_id) references orders;
 alter table if exists orders
     add constraint FK_orders_user foreign key (user_uuid) references users;
 alter table if exists reviews

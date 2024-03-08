@@ -29,16 +29,11 @@
                 <td>${dish.id}</td>
                 <td>${dish.name}</td>
                 <td>${dish.price} руб</td>
-                <td>${dish.cookingTime.toHoursPart()} часов / ${dish.cookingTime.toMinutesPart()} минут
-                    / ${dish.cookingTime.toMinutesPart()} секунд
-                </td>
+                <td>${dish.cookingTime.toHoursPart()} часов / ${dish.cookingTime.toMinutesPart()} минут / ${dish.cookingTime.toSecondsPart()} секунд</td>
                 <td>${dish.count} (в штуках)</td>
                 <td>${dish.weight} (в граммах)</td>
                 <td><a href="/dish/${dish.id}" target="_blank">подробнее</a></td>
-                <td style="background-color: aqua">
-                    <input type="number" min="0" max="${dish.count}" step="1" value="0"
-                           name="dishCounts[${dish.id}]" title="количество блюда ограничено"/>
-                </td>
+                <td style="background-color: aqua"><input type="number" min="0" max="${dish.count}" step="1" value="0" name="dishCountsStr[${dish.id}]" title="количество блюда ограничено"/></td>
             </tr>
         </#list>
     </table>
