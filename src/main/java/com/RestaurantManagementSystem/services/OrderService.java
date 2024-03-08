@@ -3,7 +3,6 @@ package com.RestaurantManagementSystem.services;
 import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.dto.OrderDTO;
-import com.RestaurantManagementSystem.kitchen.Kitchen;
 import com.RestaurantManagementSystem.mappers.CycleAvoidingMappingContext;
 import com.RestaurantManagementSystem.mappers.DishMapper;
 import com.RestaurantManagementSystem.mappers.OrderMapper;
@@ -15,9 +14,9 @@ import com.RestaurantManagementSystem.repositories.DishRepository;
 import com.RestaurantManagementSystem.repositories.OrderRepository;
 import com.RestaurantManagementSystem.repositories.UserRepository;
 import com.RestaurantManagementSystem.utils.OrderUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -37,7 +36,7 @@ public class OrderService {
 
     private final OrderUtils orderUtils;
 
-    private final Kitchen kitchen = new Kitchen(GLOBAL_VARIABLES.COUNT_COOKS);
+    private final KitchenService kitchenService = new KitchenService(GLOBAL_VARIABLES.COUNT_COOKS);
 
     public OrderDTO getOrderById(Long id) {
         return OrderMapper.INSTANCE.ToDTOFromModel(
@@ -51,6 +50,7 @@ public class OrderService {
                 .toList();
     }
 
+    @Transactional
     public void createOrder(Map<Long, Long> dishCounts, Principal principal) {
         if (!orderUtils.isValidCounts(dishCounts)) {
             return;
@@ -78,9 +78,10 @@ public class OrderService {
         orderDTO.setUser(UserMapper.INSTANCE.ToDTOFromModel(userRepository.findByPrincipal(principal), new CycleAvoidingMappingContext()));
         orderDTO.setPaid(false);
 
-        kitchen.addOrder(orderDTO);
-
         OrderModel orderModel = orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
+
+        kitchenService.addOrder(orderDTO);
+
         log.info("Creating new Order. id={}; dishes names={}; status={}; user email={}",
                 orderModel.getId(),
                 orderModel.getWaitingDishes().stream().map(DishModel::getName).collect(Collectors.toList()),
@@ -89,6 +90,7 @@ public class OrderService {
         );
     }
 
+    @Transactional
     public void updateOder(OrderDTO orderDTO, Map<Long, Long> dishCounts) {
         if (!orderUtils.isCookingStatus(orderDTO) || !orderUtils.isValidCounts(dishCounts)) {
             return;

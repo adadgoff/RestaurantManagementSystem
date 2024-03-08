@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class DishService {
     private final DishRepository dishRepository;
 
-    // Same methods for USER and ADMIN, but some fields are not displayed for USER.
+    // NOTE Same methods for USER and ADMIN, but some fields are not displayed for USER.
     public List<DishDTO> getDishes(String name, Boolean onlyActive) {
         // TODO: Сделать, чтобы != name, а просто dish.name.contains(name).
         List<DishModel> dishModels;
@@ -43,7 +43,7 @@ public class DishService {
                 .collect(Collectors.toList());
     }
 
-    // Same methods for USER and ADMIN, but some fields are not displayed for USER.
+    // NOTE Same methods for USER and ADMIN, but some fields are not displayed for USER.
     public DishDTO getDishById(Long id) {
         DishModel dishModel = dishRepository.findById(id).orElseThrow();
         return DishMapper.INSTANCE.ToDTOFromModel(dishModel, new CycleAvoidingMappingContext());
