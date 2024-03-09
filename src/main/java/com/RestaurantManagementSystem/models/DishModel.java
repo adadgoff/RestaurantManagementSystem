@@ -22,7 +22,7 @@ public class DishModel {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1023)
     private String description;
 
     @Column(name = "price (rubles)", nullable = false)

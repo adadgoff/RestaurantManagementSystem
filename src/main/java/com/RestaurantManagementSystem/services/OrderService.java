@@ -14,7 +14,6 @@ import com.RestaurantManagementSystem.repositories.DishRepository;
 import com.RestaurantManagementSystem.repositories.OrderRepository;
 import com.RestaurantManagementSystem.repositories.UserRepository;
 import com.RestaurantManagementSystem.utils.OrderUtils;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,7 @@ public class OrderService {
 
     private final OrderUtils orderUtils;
 
+    @Autowired
     private final KitchenService kitchenService = new KitchenService(GLOBAL_VARIABLES.COUNT_COOKS);
 
     public OrderDTO getOrderById(Long id) {
@@ -54,8 +54,7 @@ public class OrderService {
                 .toList();
     }
 
-    @Transactional
-    public void createOrder(Map<Long, Long> dishCounts, Principal principal) {
+    public void createOrder(Map<Long, Long> dishCounts, Principal principal) throws InterruptedException {
         if (!orderUtils.isValidCounts(dishCounts)) {
             return;
         }
@@ -85,7 +84,7 @@ public class OrderService {
         OrderModel orderModel = orderRepository.save(
                 OrderMapper.INSTANCE.ToModelFromDTO(orderDTO, new CycleAvoidingMappingContext()));
 
-        kitchenService.addOrder(orderDTO);
+        kitchenService.addOrder(OrderMapper.INSTANCE.ToDTOFromModel(orderModel, new CycleAvoidingMappingContext()));
 
         log.info("Creating new Order. id={}; dishes names={}; status={}; user email={}",
                 orderModel.getId(),
@@ -95,7 +94,6 @@ public class OrderService {
         );
     }
 
-    @Transactional
     public void updateOder(OrderDTO orderDTO, Map<Long, Long> dishCounts) {
         if (!orderUtils.isCookingStatus(orderDTO) || !orderUtils.isValidCounts(dishCounts)) {
             return;
@@ -129,7 +127,5 @@ public class OrderService {
         if (!orderUtils.isCookingStatus(orderDTO)) {
             return;
         }
-
-
     }
 }

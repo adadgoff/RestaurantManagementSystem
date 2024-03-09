@@ -8,6 +8,7 @@ import com.RestaurantManagementSystem.models.enums.Role;
 import com.RestaurantManagementSystem.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean createUser(UserDTO userDTO) {

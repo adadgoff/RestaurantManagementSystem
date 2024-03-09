@@ -52,3 +52,6 @@ insert into dishes (active, cooking_time, count, description, name, "price (rubl
 values (true, 2 * 10 ^ 9, 100,
         'Тестовое блюдо 2 секунды.',
         'Тестовое блюдо 2 секунды.', 30, 100, 5);
+
+select setval('dishes_seq', 6);
+select setval('images_seq', 6);

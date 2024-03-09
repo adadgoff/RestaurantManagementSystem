@@ -52,7 +52,7 @@ public class OrderController {
     }
 
     @PostMapping("/order/create")
-    public String createOrder(@RequestParam Map<String, String> params, Principal principal) {
+    public String createOrder(@RequestParam Map<String, String> params, Principal principal) throws InterruptedException {
         // TODO NOTE: it would be possible to use React to make input for convenience and optimizations, but so far so(:
         Map<Long, Long> dishCounts = MapUtils.FromStringStringMapToLongLongMap(params, List.of("_csrf"));
         orderService.createOrder(dishCounts, principal);

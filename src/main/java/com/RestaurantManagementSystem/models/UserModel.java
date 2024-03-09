@@ -27,7 +27,7 @@ public class UserModel implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 511)
     private String password;
 
     @Column(name = "active", nullable = false)

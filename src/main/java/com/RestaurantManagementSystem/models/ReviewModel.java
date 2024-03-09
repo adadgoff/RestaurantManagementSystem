@@ -23,7 +23,7 @@ public class ReviewModel {
     @Column(name = "rating", nullable = false)
     private Rating rating;
 
-    @Column(name = "text", nullable = false)
+    @Column(name = "text", nullable = false, length = 2047)
     private String text;
 
     @Column(name = "publish_time", nullable = false)
