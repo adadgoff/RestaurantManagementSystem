@@ -167,4 +167,9 @@ docker-compose up -d
 
 1. DTO (Data Transfer Object);
 2. Repository;
-3. 
+
+## Диаграмма сущностей (таблиц)
+https://www.figma.com/file/z0RMNJJXFgpHeO5CrgRLLa/RestaurantManagementSystem?type=whiteboard&node-id=0%3A1&t=UDWkLKKTQqFBR73D-1
+
+## Диаграмма поведения пользователя
+https://drive.google.com/file/d/1NDLcaBrS0O3PN2washyp7Emz5Dqwi1bw/view?usp=sharing

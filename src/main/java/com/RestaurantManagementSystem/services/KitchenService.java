@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +20,7 @@ public class KitchenService {
     @Getter
     @Setter
     private ConcurrentLinkedQueue<OrderDTO> ordersToCook = new ConcurrentLinkedQueue<>();
-    private final Lock lock = new ReentrantLock();
-    private final Condition ordersAvailable = lock.newCondition();
+    private final Object monitor = new Object();
 
     public KitchenService(int countCooks) {
         // TODO: If bad count of threads -> Stop Program with exception("bad count of threads").
@@ -33,7 +29,7 @@ public class KitchenService {
 
         log.info(" =========== KITCHEN START INITIALIZING =========== ");
         for (int i = 0; i < countCooks; i++) {
-            cooks[i] = new Thread(new CookService(this, lock, ordersAvailable, orderRepository));
+            cooks[i] = new Thread(new CookService(this, monitor, orderRepository));
             cooks[i].start();
             log.info("| COOK №{} initializing work!", i);
         }
@@ -41,12 +37,9 @@ public class KitchenService {
     }
 
     public void addOrder(OrderDTO orderDTO) throws InterruptedException {
-        lock.lock();
-        try {
-            ordersToCook.add(orderDTO);
-            ordersAvailable.signalAll();
-        } finally {
-            lock.unlock();
+        ordersToCook.add(orderDTO);
+        synchronized (monitor) {
+            monitor.notifyAll();
         }
     }
 

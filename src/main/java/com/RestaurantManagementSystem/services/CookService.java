@@ -10,15 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CookService implements Runnable {
     private final KitchenService kitchenService;
-    private final Lock lock;
-    private final Condition ordersAvailable;
+    private final Object monitor;
     private final OrderRepository orderRepository;
 
     public void cookDish() throws InterruptedException {
@@ -38,40 +35,31 @@ public class CookService implements Runnable {
     }
 
     public OrderDTO getOrderWithWaitingDishes() throws InterruptedException {
-        lock.lock();
-        try {
+        synchronized (monitor) {
             while (kitchenService.getOrdersToCook().isEmpty() || kitchenService.getOrdersToCook().stream().allMatch(orderDTO -> orderDTO.getWaitingDishes().isEmpty())) {
-                ordersAvailable.await();
+                monitor.wait();
             }
             return kitchenService.getOrdersToCook().stream().filter(orderDTO -> !orderDTO.getWaitingDishes().isEmpty()).findFirst().orElseThrow();
-        } finally {
-            lock.unlock();
         }
     }
 
     public OrderDTO updateOrderWaitingDish(OrderDTO orderToCook, DishDTO waitingDish) {
         // dishDTO переходит из waiting в cooking.
-        lock.lock();
-        try {
+        synchronized (monitor) {
             orderToCook.getWaitingDishes().remove(waitingDish);
             orderToCook.getCookingDishes().add(waitingDish);
             OrderModel orderModel = orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderToCook, new CycleAvoidingMappingContext()));
             return OrderMapper.INSTANCE.ToDTOFromModel(orderModel, new CycleAvoidingMappingContext());
-        } finally {
-            lock.unlock();
         }
     }
 
     public void updateOrderCookingDish(OrderDTO orderToCook, DishDTO cookingDish) {
         // dishDTO переходит из cooking в cooked.
-        lock.lock();
-        try {
+        synchronized (monitor) {
             orderToCook.getCookingDishes().remove(cookingDish);
             orderToCook.getCookedDishes().add(cookingDish);
             orderRepository.save(OrderMapper.INSTANCE.ToModelFromDTO(orderToCook, new CycleAvoidingMappingContext()));
             // TODO: implement status.
-        } finally {
-            lock.unlock();
         }
     }
 
