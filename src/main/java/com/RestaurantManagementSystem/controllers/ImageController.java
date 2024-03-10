@@ -1,7 +1,7 @@
 package com.RestaurantManagementSystem.controllers;
 
 
-import com.RestaurantManagementSystem.models.Image;
+import com.RestaurantManagementSystem.models.ImageModel;
 import com.RestaurantManagementSystem.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -20,7 +20,7 @@ public class ImageController {
 
     @GetMapping("/image/{id}")
     private ResponseEntity<?> getImageById(@PathVariable Long id) {
-        Image image = imageRepository.findById(id).orElse(null);
+        ImageModel image = imageRepository.findById(id).orElseThrow();
         return ResponseEntity.ok()
                 .header("fileId", String.valueOf(image.getId()))
                 .contentType(MediaType.valueOf(image.getContentType()))

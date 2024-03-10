@@ -1,8 +1,10 @@
 package com.RestaurantManagementSystem.repositories;
 
-import com.RestaurantManagementSystem.models.Image;
+import com.RestaurantManagementSystem.models.ImageModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ImageRepository extends JpaRepository<Image, Long> {
+@Repository
+public interface ImageRepository extends JpaRepository<ImageModel, Long> {
 
 }

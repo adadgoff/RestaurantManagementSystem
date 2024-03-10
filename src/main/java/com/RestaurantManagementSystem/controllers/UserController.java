@@ -1,6 +1,6 @@
 package com.RestaurantManagementSystem.controllers;
 
-import com.RestaurantManagementSystem.models.User;
+import com.RestaurantManagementSystem.dto.UserDTO;
 import com.RestaurantManagementSystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,17 +24,12 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registerUser(User user, Model model) {
-        if (!userService.createUser(user)) {
+    public String registerUser(UserDTO userDTO, Model model) {
+        if (!userService.createUser(userDTO)) {
             // TODO: show error in html.
-            model.addAttribute("errorMessage", "Пользователь с email=" + user.getEmail() + " уже существует.");
+            model.addAttribute("errorMessage", "Пользователь с email=" + userDTO.getEmail() + " уже существует.");
             return "registration";
         }
         return "redirect:/login";
-    }
-
-    @GetMapping("/hello")
-    public String securityUrl() {
-        return "hello";
     }
 }

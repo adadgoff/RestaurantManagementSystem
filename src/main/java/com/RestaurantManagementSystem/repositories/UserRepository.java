@@ -1,8 +1,14 @@
 package com.RestaurantManagementSystem.repositories;
 
-import com.RestaurantManagementSystem.models.User;
+import com.RestaurantManagementSystem.models.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+import java.util.UUID;
+
+@Component
+@Repository
+public interface UserRepository extends JpaRepository<UserModel, UUID>, UserRepositoryExpanding {
+    UserModel findByEmail(String email);
 }

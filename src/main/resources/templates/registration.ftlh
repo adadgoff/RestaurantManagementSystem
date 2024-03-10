@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<#-- TODO: пользователь test@test.test и admin@admin.admin уже есть -->
 <html>
 <head>
     <title>Restaurant Management System (RMS)</title>
