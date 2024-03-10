@@ -1,5 +1,6 @@
 package com.RestaurantManagementSystem.services;
 
+import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.dto.DishDTO;
 import com.RestaurantManagementSystem.dto.OrderDTO;
 import com.RestaurantManagementSystem.mappers.CycleAvoidingMappingContext;
@@ -37,8 +38,10 @@ public class CookService implements Runnable {
     public OrderDTO getOrderWithWaitingDishes() throws InterruptedException {
         synchronized (monitor) {
             while (kitchenService.getOrdersToCook().isEmpty() || kitchenService.getOrdersToCook().stream().allMatch(orderDTO -> orderDTO.getWaitingDishes().isEmpty())) {
+                log.info("| No dishes to cook. {} is waiting.", Thread.currentThread());
                 monitor.wait();
             }
+            log.info("| Has dishes to cook. {} is going to cooking.", Thread.currentThread());
             return kitchenService.getOrdersToCook().stream().filter(orderDTO -> !orderDTO.getWaitingDishes().isEmpty()).findFirst().orElseThrow();
         }
     }

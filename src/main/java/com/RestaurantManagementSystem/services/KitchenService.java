@@ -1,5 +1,6 @@
 package com.RestaurantManagementSystem.services;
 
+import com.RestaurantManagementSystem.GLOBAL_VARIABLES;
 import com.RestaurantManagementSystem.dto.OrderDTO;
 import com.RestaurantManagementSystem.repositories.OrderRepository;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class KitchenService {
     @Getter
     @Setter
     private ConcurrentLinkedQueue<OrderDTO> ordersToCook = new ConcurrentLinkedQueue<>();
-    private final Object monitor = new Object();
+    private final Object monitor = GLOBAL_VARIABLES.MONITOR;
 
     public KitchenService(int countCooks) {
         // TODO: If bad count of threads -> Stop Program with exception("bad count of threads").
@@ -39,7 +40,9 @@ public class KitchenService {
     public void addOrder(OrderDTO orderDTO) throws InterruptedException {
         ordersToCook.add(orderDTO);
         synchronized (monitor) {
+            log.info("Order with id={} was added", orderDTO.getId());
             monitor.notifyAll();
+            Thread.sleep(5000);
         }
     }
 
