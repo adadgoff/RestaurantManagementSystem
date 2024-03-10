@@ -1,5 +1,19 @@
 # Конструирование Программного Обеспечения: Домашняя работа №2
 
+## Инструкция по запуску
+
+1. Запускаете `docker-compose.yml`;
+2. Подключаетесь к БД;
+3. Запускаете проект. `localhost:8000`.
+
+## Диаграмма сущностей (таблиц)
+
+https://www.figma.com/file/z0RMNJJXFgpHeO5CrgRLLa/RestaurantManagementSystem?type=whiteboard&node-id=0%3A1&t=UDWkLKKTQqFBR73D-1
+
+## Диаграмма поведения пользователя
+
+https://drive.google.com/file/d/1NDLcaBrS0O3PN2washyp7Emz5Dqwi1bw/view?usp=sharing
+
 ## Правила программистского клуба
 
 ![Tyler](docs/fightclub.webp)
@@ -167,9 +181,3 @@ docker-compose up -d
 
 1. DTO (Data Transfer Object);
 2. Repository;
-
-## Диаграмма сущностей (таблиц)
-https://www.figma.com/file/z0RMNJJXFgpHeO5CrgRLLa/RestaurantManagementSystem?type=whiteboard&node-id=0%3A1&t=UDWkLKKTQqFBR73D-1
-
-## Диаграмма поведения пользователя
-https://drive.google.com/file/d/1NDLcaBrS0O3PN2washyp7Emz5Dqwi1bw/view?usp=sharing
